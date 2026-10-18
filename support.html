@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>浮想 · 支持</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600&family=ZCOOL+XiaoWei&display=swap">
+<style>
+:root{--paper:#fff;--ink:#17151a;--soft:#6c5f8f;--pink:#ffd2de;--mint:#c4efdb;--lilac:#ded4ff;--butter:#ffefa8;--display:"ZCOOL XiaoWei","Noto Serif SC","Songti SC",serif;--body:"Noto Serif SC","Songti SC","STSong",serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.8}
+main{max-width:720px;margin:0 auto;padding:48px 20px 72px;display:flex;flex-direction:column;gap:28px}
+header{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+header img{width:84px;height:84px;border-radius:20px;border:1.5px solid var(--ink)}
+h1{font-family:var(--display);font-weight:400;font-size:52px;line-height:1;margin:0}
+.sub{margin:0}
+h2{font-family:var(--display);font-weight:400;font-size:26px;margin:0}
+section{display:flex;flex-direction:column;gap:10px}
+p{margin:0}
+.en{color:var(--soft);font-size:15px}
+details{border:1.5px solid var(--ink);border-radius:16px;padding:12px 16px}
+summary{cursor:pointer;font-weight:600}
+details p{margin-top:8px}
+.coffee{border:1.5px solid var(--ink);border-radius:22px;padding:20px;background:var(--butter);display:flex;gap:20px;align-items:center;flex-wrap:wrap;box-shadow:4px 4px 0 var(--ink)}
+.coffee img{width:180px;max-width:100%;border-radius:12px;border:1.5px solid var(--ink);background:#fff}
+.coffee div{flex:1 1 220px;min-width:0;display:flex;flex-direction:column;gap:6px}
+.placeholder{border:1.5px dashed var(--ink);border-radius:12px;padding:16px;background:#fff;font-size:14px}
+a{color:inherit}
+footer{font-size:14px;color:var(--soft)}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <img src="icons/icon-192.png" alt="浮想的图标">
+    <div>
+      <h1>浮想</h1>
+      <p class="sub">没空做的灵感，先放在这里漂着。</p>
+      <p class="sub"><a href="./">打开网页版 →</a></p>
+    </div>
+  </header>
+
+  <section>
+    <h2>它是做什么的</h2>
+    <p>想到一个点子但现在没空做？在「浮想」里写一句话就存好了。灵感会变成彩色的泡泡，在池子里慢慢飘；你标了「想做」的会扭来扭去，重要的类别飘在最上面。等你有时间了，打开就能找到。</p>
+    <p class="en">Got an idea but no time for it now? Write one line in Fuxiang and it's saved. Ideas become soft coloured bubbles drifting in a pond; the ones you mark "want to do" wiggle, and your most important categories float to the top.</p>
+  </section>
+
+  <section>
+    <h2>常见问题</h2>
+    <details>
+      <summary>我的灵感存在哪里？会上传吗？</summary>
+      <p>只存在你自己的 iPhone 上，不会上传。详见<a href="privacy.html">隐私政策</a>。</p>
+    </details>
+    <details>
+      <summary>换手机或删了 App，灵感还在吗？</summary>
+      <p>删除 App 会删掉里面的灵感。请先在「更多 → 导出备份」里保存一份，新手机上用「更多 → 导入备份」就能找回来。</p>
+    </details>
+    <details>
+      <summary>怎么改类别的先后顺序？</summary>
+      <p>「更多 → 类别排序」，按住左边的小点点上下拖动。</p>
+    </details>
+    <details>
+      <summary>怎么给一个灵感换类别？</summary>
+      <p>在漂浮视图里按住泡泡不动一会儿，把它拖到上面的类别标签上。</p>
+    </details>
+    <details>
+      <summary>为什么没有声音？</summary>
+      <p>在「更多」里打开声音。如果手机侧面的静音开关打开了，也会听不到。</p>
+    </details>
+  </section>
+
+  <section>
+    <h2>请我喝杯咖啡</h2>
+    <div class="coffee">
+      <img src="wechat.png" alt="微信赞赏码" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'placeholder',textContent:'（把你的微信赞赏码图片命名为 wechat.png，放进网站文件夹，这里就会显示出来。）'}))">
+      <div>
+        <p>如果「浮想」帮你留住了几个好点子，可以用微信扫一扫，请我喝杯咖啡。谢谢你！</p>
+        <p class="en">If Fuxiang helped you keep a few good ideas, you can buy me a coffee by scanning the WeChat code. Thank you!</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>联系我</h2>
+    <p>（在这里写你的联系邮箱，例如 hello@example.com）</p>
+    <p class="en">(Put your contact email here.)</p>
+  </section>
+
+  <footer><a href="privacy.html">隐私政策 Privacy Policy</a></footer>
+</main>
+</body>
+</html>

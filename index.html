@@ -1,0 +1,2576 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="没空做的灵感，先放在这里漂着。">
+<meta name="theme-color" content="#ffffff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="浮想">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<title>浮想</title>
+<style>
+@font-face{font-family:"ZCOOL XiaoWei";src:url("fonts/ZCOOLXiaoWei.woff") format("woff");font-weight:400;font-display:swap}
+@font-face{font-family:"Noto Serif SC";src:url("fonts/NotoSerifSC-400.woff") format("woff");font-weight:300 500;font-display:swap}
+@font-face{font-family:"Noto Serif SC";src:url("fonts/NotoSerifSC-600.woff") format("woff");font-weight:600 900;font-display:swap}
+
+/* Layout: one white pond framed in ink, controls above it, and a key below that says what each kind of motion means.
+   Deliberately a single light theme: pure white ground, ink lines, macaron fills. */
+:root{
+  --paper:#ffffff;
+  --ink:#17151a;
+  --soft:#6c5f8f;
+  --scrim:rgba(23,21,26,.30);
+  --pink:#ffd2de;
+  --mint:#c4efdb;
+  --lilac:#ded4ff;
+  --butter:#ffefa8;
+  --sky:#c8e5ff;
+  --peach:#ffd7bf;
+  --aqua:#c4f0ec;
+  --sage:#dcecc4;
+  --coral:#ffcbc4;
+  --periwinkle:#d3daff;
+  --sand:#f4e4c9;
+  --shadow:#17151a;
+  --on-pastel:#17151a;
+  --rip:#17151a;
+  --display:"ZCOOL XiaoWei","Noto Serif SC","Songti SC","STSong",serif;
+  --body:"Noto Serif SC","Songti SC","STSong","Source Han Serif SC","SimSun",serif;
+  --mono:"Noto Serif SC","Songti SC","STSong",serif;
+  --shelf:70px;
+  color-scheme:light;
+}
+/* Night (19:00–6:00 by the viewer's clock): a warm deep indigo pond, cream lines, softened macarons that glow a little. */
+:root.night{
+  --paper:#1f1c2a;
+  --ink:#f1ebe1;
+  --soft:#b9afcf;
+  --scrim:rgba(8,7,14,.58);
+  --shadow:#0f0d17;
+  --on-pastel:#1c1a24;
+  --rip:#ffffff;
+  --pink:#efbfcf;
+  --mint:#b3e2cc;
+  --lilac:#cdc2f3;
+  --butter:#efdd92;
+  --sky:#b7d6f3;
+  --peach:#f0c6ad;
+  --aqua:#b2e1dc;
+  --sage:#cbddb2;
+  --coral:#f0b9b1;
+  --periwinkle:#c2caf2;
+  --sand:#e4d3b8;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+input,textarea,.d-body,.pk-body,.ol-body{-webkit-user-select:text;user-select:text}
+img{max-width:100%}
+.menu-sep{border:0;border-top:1.5px dashed var(--ink);margin:4px 8px;opacity:.35}
+.pv{display:flex;flex-direction:column;gap:10px}
+.pv p{margin:0;line-height:1.75}
+html,body{background:var(--paper);color:var(--ink)}
+body{font-family:var(--body);font-size:15px;line-height:1.6;transition:background-color .9s ease,color .9s ease}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2.5px solid var(--ink);outline-offset:3px}
+
+.wrap{max-width:1180px;margin:0 auto;padding-inline:clamp(16px,4vw,40px);padding-block:28px 56px;display:flex;flex-direction:column;gap:18px}
+
+/* header */
+.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px 24px}
+.brand{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 16px;min-width:0}
+.brand h1{font-family:var(--display);font-weight:400;font-size:clamp(44px,6vw,64px);line-height:1;margin:0;letter-spacing:.06em}
+.brand p{margin:0;font-size:15px;text-wrap:balance}
+
+.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.search{position:relative;flex:1 1 220px;max-width:340px;min-width:0}
+.search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;pointer-events:none}
+.search input{width:100%;height:40px;border:1.5px solid var(--ink);border-radius:999px;padding:0 16px 0 38px;background:var(--paper)}
+.search input::placeholder{color:var(--soft)}
+.seg{display:inline-flex;border:1.5px solid var(--ink);border-radius:999px;overflow:hidden;flex:none}
+.seg button{border:0;background:transparent;height:37px;padding:0 16px;cursor:pointer;white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.btn{height:40px;padding:0 18px;border-radius:999px;border:1.5px solid var(--ink);background:var(--paper);color:var(--ink);font-weight:400;cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:none;transition:box-shadow .15s}
+.btn:hover{box-shadow:3px 3px 0 var(--shadow)}
+.btn:disabled{cursor:not-allowed;box-shadow:none;border-style:dashed}
+.btn.primary{background:var(--ink);color:var(--paper)}
+.btn.primary:hover{box-shadow:3px 3px 0 var(--peach),3px 3px 0 1.5px var(--ink)}
+.btn[aria-pressed="true"]{background:var(--butter)}
+.btn.small{height:32px;padding:0 14px;font-size:13.5px}
+.counts{font-family:var(--mono);font-size:13px;margin-left:auto;font-variant-numeric:tabular-nums;white-space:nowrap}
+.btn .ico{width:16px;height:16px;flex:none}
+.btn .wave{transition:opacity .2s}
+.btn[aria-pressed="false"] .wave{opacity:.2}
+
+/* quick capture */
+.quick{position:sticky;top:calc(env(safe-area-inset-top, 0px) + 10px);z-index:12;display:flex;align-items:center;gap:8px;padding:6px 6px 6px 8px;border:1.5px solid var(--ink);border-radius:999px;background:var(--paper);box-shadow:4px 4px 0 var(--shadow);transition:box-shadow .15s}
+.quick:focus-within{box-shadow:4px 4px 0 var(--pink),4px 4px 0 1.5px var(--ink)}
+.qcat{position:relative;flex:none;display:inline-flex}
+.qcat select{-webkit-appearance:none;appearance:none;height:38px;max-width:112px;padding:0 26px 0 14px;border:1.5px solid var(--ink);border-radius:999px;background:var(--c,var(--butter));font:inherit;font-size:14px;font-weight:500;color:var(--ink);cursor:pointer;text-overflow:ellipsis}
+.qcat::after{content:"▾";position:absolute;right:11px;top:50%;transform:translateY(-50%);font-size:11px;pointer-events:none}
+.qinput{flex:1 1 auto;min-width:0;height:42px;border:0;outline:none;background:transparent;font-size:16px;padding:0 4px}
+.qinput::placeholder{color:var(--soft)}
+.qmic{flex:none;width:40px;height:40px;padding:0;border:1.5px solid var(--ink);border-radius:50%;background:var(--paper);cursor:pointer;display:grid;place-items:center}
+.qmic svg{width:19px;height:19px}
+.qmic:hover{background:var(--sky)}
+.qmic.on{background:var(--pink);animation:listen 1.2s ease-in-out infinite}
+@keyframes listen{0%,100%{box-shadow:0 0 0 0 var(--pink)}50%{box-shadow:0 0 0 6px var(--pink)}}
+.quick .btn.primary{height:42px}
+.qtip{margin:-6px 0 0 20px;font-size:13.5px;color:var(--soft);max-width:70ch}
+
+/* more menu */
+.more{position:relative;flex:none}
+.menu{position:absolute;right:0;top:calc(100% + 8px);z-index:16;min-width:184px;padding:8px;background:var(--paper);border:1.5px solid var(--ink);border-radius:18px;box-shadow:4px 4px 0 var(--shadow);display:flex;flex-direction:column;gap:4px}
+.menu .btn{width:100%;justify-content:flex-start;border-color:transparent;border-radius:12px;height:40px}
+.menu .btn:hover{box-shadow:none;background:var(--sky)}
+.menu .btn[aria-pressed="true"]{background:var(--butter)}
+.menu .btn:disabled{border-color:transparent;opacity:.4}
+.menu-row{display:flex;flex-direction:column;gap:6px;padding:6px 6px 4px}
+.menu-lbl{font-size:12.5px;color:var(--soft);padding-left:8px}
+.menu .seg{display:flex;width:100%}
+.menu .seg button{flex:1;height:34px;padding:0 8px}
+
+/* category filter */
+.filters{display:flex;gap:8px;overflow-x:auto;padding:2px 4px 6px 2px;margin-top:-6px;scrollbar-width:thin}
+.fchip{flex:none;display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border:1.5px solid var(--ink);border-radius:999px;background:var(--c,var(--paper));font-family:var(--display);font-size:15px;cursor:pointer;white-space:nowrap;transition:opacity .2s,box-shadow .15s}
+.fchip small{font-family:var(--mono);font-size:11.5px;font-variant-numeric:tabular-nums}
+.fchip:hover{box-shadow:2px 2px 0 var(--shadow)}
+.fchip[aria-pressed="true"]{box-shadow:3px 3px 0 var(--shadow)}
+.fchip.all[aria-pressed="true"]{background:var(--ink);color:var(--paper);box-shadow:none}
+.filters.on .fchip:not([aria-pressed="true"]){opacity:.5}
+
+/* sound panel */
+.soundbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 26px;padding:10px 18px;border:1.5px dashed var(--ink);border-radius:18px;background:var(--sky)}
+.slider{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:500;cursor:pointer}
+.slider input{-webkit-appearance:none;appearance:none;width:140px;height:22px;margin:0;background:transparent;cursor:pointer}
+.slider input::-webkit-slider-runnable-track{height:3px;background:var(--ink);border-radius:2px}
+.slider input::-moz-range-track{height:3px;background:var(--ink);border-radius:2px}
+.slider input::-webkit-slider-thumb{-webkit-appearance:none;box-sizing:border-box;width:18px;height:18px;margin-top:-7.5px;border-radius:50%;background:var(--paper);border:1.5px solid var(--ink)}
+.slider input::-moz-range-thumb{box-sizing:border-box;width:18px;height:18px;border-radius:50%;background:var(--paper);border:1.5px solid var(--ink)}
+.soundbar .hint{font-size:13px}
+
+/* pond */
+.pond{position:relative;height:clamp(460px,62vh,660px);border:1.5px solid var(--ink);border-radius:28px;overflow:hidden;background:var(--paper)}
+#bubbles{position:absolute;inset:0}
+.peek{position:absolute;left:0;top:0;z-index:5;width:256px;max-width:calc(100% - 16px);padding:12px 15px 11px;background:var(--paper);border:1.5px solid var(--ink);border-radius:18px;box-shadow:4px 4px 0 var(--shadow);pointer-events:none;display:flex;flex-direction:column;gap:6px;opacity:0;transition:opacity .14s ease}
+.peek.in{opacity:1}
+.pk-head{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.pk-head .chip{font-size:13.5px;padding:1px 10px}
+.pk-title{font-family:var(--display);font-size:21px;line-height:1.3;letter-spacing:.03em;overflow-wrap:anywhere}
+.pk-body{margin:0;font-size:14px;line-height:1.7;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.pk-img{display:block;width:100%;max-height:130px;object-fit:cover;border:1.5px solid var(--ink);border-radius:12px}
+.pk-foot{font-size:12px;color:var(--soft)}
+.peek.tap{pointer-events:auto;cursor:pointer}
+
+
+/* dragging a bubble onto a category */
+.node{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+.node.lifted{opacity:.22}
+.ghost{position:fixed;left:0;top:0;z-index:40;pointer-events:none;will-change:transform}
+.ghost .blob{box-shadow:5px 5px 0 var(--shadow)}
+body.bubble-dragging,body.bubble-dragging *{cursor:grabbing}
+.fchip{transition:opacity .2s,box-shadow .15s,transform .15s}
+.filters.dropping .fchip:not(.all){border-style:dashed;opacity:1}
+.filters.dropping .fchip.all{opacity:.35}
+.filters .fchip.over{transform:scale(1.12);border-style:solid;box-shadow:3px 3px 0 var(--shadow)}
+
+/* night glow */
+:root.night .blob:not(.photo){box-shadow:0 0 24px -6px var(--c)}
+:root.night .node:hover .blob:not(.photo),:root.night .node:focus-visible .blob:not(.photo),:root.night .node.hit .blob:not(.photo){box-shadow:3px 3px 0 var(--shadow),0 0 26px -4px var(--c)}
+.fizz-layer{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.fizz{position:absolute;width:var(--s);height:var(--s);border:1.5px solid var(--ink);border-radius:50%;background:var(--paper);opacity:0;animation:fizz var(--d) cubic-bezier(.3,.6,.4,1) forwards}
+@keyframes fizz{0%{transform:translate(0,0) scale(.4);opacity:0}15%{opacity:1}80%{opacity:.9}100%{transform:translate(var(--dx),var(--dy)) scale(1.1);opacity:0}}
+.node{position:absolute;left:0;top:0;border:0;background:none;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:7px;will-change:transform;transition:opacity .35s}
+.blob{display:block;background:var(--c);border:1.5px solid var(--ink);border-radius:var(--r1);padding:11px 18px;max-width:172px;font-family:var(--display);font-size:16.5px;font-weight:400;letter-spacing:.03em;line-height:1.4;text-align:center;text-wrap:balance;transition:box-shadow .18s}
+.node:hover .blob,.node:focus-visible .blob,.node.hit .blob{box-shadow:3px 3px 0 var(--shadow)}
+.node:focus-visible{outline:none}
+.node[data-kind="full"][data-status="new"] .blob{animation:morph 14s ease-in-out infinite alternate}
+.node[data-status="want"] .blob{border-width:2px;font-weight:400;font-size:18.5px;padding:13px 21px;animation:wiggle 3.2s ease-in-out infinite alternate}
+.node[data-kind="seed"] .blob{width:16px;height:16px;padding:0;border-radius:50%!important;animation:none}
+.node[data-kind="done"] .blob{font-size:12.5px;padding:5px 12px;border-radius:999px!important;animation:none;max-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.blob.photo{width:78px;height:78px;padding:0;border-radius:50%!important;background-size:cover;background-position:center;box-shadow:0 0 0 5px var(--c),0 0 0 6.5px var(--ink)}
+.node:hover .blob.photo,.node:focus-visible .blob.photo,.node.hit .blob.photo{box-shadow:0 0 0 5px var(--c),0 0 0 6.5px var(--ink),4px 4px 0 6.5px var(--ink)}
+.tag{font-family:var(--display);font-size:14px;font-weight:400;background:var(--paper);border:1.5px solid var(--ink);border-radius:999px;padding:1px 10px;max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.node.dim{opacity:.14;pointer-events:none}
+.pond.still .blob{animation:none!important}
+
+@keyframes morph{from{border-radius:var(--r1)}to{border-radius:var(--r2)}}
+@keyframes wiggle{
+  0%{border-radius:var(--r1);transform:rotate(-3deg) scale(1)}
+  50%{transform:rotate(1deg) scale(1.05)}
+  100%{border-radius:var(--r2);transform:rotate(3deg) scale(1)}
+}
+
+.empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:24px;pointer-events:none}
+.empty > div{display:flex;flex-direction:column;align-items:center;gap:10px;pointer-events:auto}
+.empty h2{font-family:var(--display);font-weight:400;font-size:28px;margin:0}
+.empty p{margin:0;max-width:30ch}
+.note{margin:0;font-size:13.5px;color:var(--soft)}
+
+/* list view */
+.list{display:flex;flex-direction:column;gap:30px}
+.group h3{font-family:var(--display);font-weight:400;font-size:26px;margin:0 0 12px;display:flex;align-items:baseline;gap:10px}
+.group h3 small{font-family:var(--mono);font-size:12.5px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.card{text-align:left;border:1.5px solid var(--ink);border-radius:18px;background:var(--paper);padding:14px 16px;display:flex;gap:14px;align-items:flex-start;cursor:pointer;min-width:0;transition:box-shadow .15s}
+.card:hover{box-shadow:3px 3px 0 var(--shadow)}
+.card .sw{flex:none;width:46px;height:46px;border:1.5px solid var(--ink);background-color:var(--c);background-size:cover;background-position:center;border-radius:var(--r1)}
+.card .meta{min-width:0;display:flex;flex-direction:column;gap:3px}
+.card strong{font-family:var(--display);font-weight:400;font-size:17.5px;letter-spacing:.02em;line-height:1.35}
+.card p{margin:0;font-size:13.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card time,.mono{font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums}
+.list-empty{margin:0;padding:32px 0;text-align:center}
+.group h3{align-items:center}
+.rank-dot{flex:none;width:24px;height:24px;border:1.5px solid var(--ink);border-radius:50%;background:var(--c);display:inline-grid;place-items:center;font-family:var(--mono);font-size:12px;font-weight:500;line-height:1;font-variant-numeric:tabular-nums}
+
+/* outline view */
+.outline{display:flex;flex-direction:column;gap:4px;max-width:820px}
+.ol-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
+.ol-head h3{font-family:var(--display);font-weight:400;font-size:30px;line-height:1.2;margin:0}
+.tree,.tree ul{list-style:none;margin:0 0 0 11px;padding:0 0 0 22px;border-left:1.5px solid var(--ink)}
+.tree li{position:relative;padding:6px 0;--tick:19px}
+.tree li::before{content:"";position:absolute;left:-23.5px;top:var(--tick);width:17px;border-top:1.5px solid var(--ink)}
+.tree li:last-child::after{content:"";position:absolute;left:-26px;top:calc(var(--tick) + 1.5px);bottom:0;width:6px;background:var(--paper)}
+.tree .ol-item{padding:5px 0;--tick:17px}
+.tree .ol-cat > ul{margin-top:4px}
+.ol-fold{display:inline-flex;align-items:center;gap:10px;border:0;background:none;padding:0;cursor:pointer;text-align:left;max-width:100%}
+.ol-fold:hover .ol-name{text-decoration:underline;text-underline-offset:3px}
+.ol-name{font-family:var(--display);font-weight:400;font-size:19px;letter-spacing:.03em}
+.ol-count{font-family:var(--mono);font-size:12px;color:var(--soft)}
+.ol-caret{font-size:12px;color:var(--soft)}
+.ol-idea{display:flex;align-items:flex-start;gap:10px;min-width:0}
+.ol-check{flex:none;width:20px;height:20px;margin-top:2px;padding:0;border:1.5px solid var(--ink);border-radius:50%;background:var(--paper);cursor:pointer;display:grid;place-items:center;font-size:11px;line-height:1;color:transparent;transition:background .15s}
+.ol-check:hover,.ol-check:focus-visible{background:var(--mint);color:var(--ink)}
+.ol-check:disabled{background:var(--mint);color:var(--ink);cursor:default}
+.ol-text{min-width:0;display:flex;flex-direction:column;gap:1px}
+.ol-line{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px}
+.ol-title{border:0;background:none;padding:0;font-family:var(--display);font-size:17px;font-weight:400;letter-spacing:.02em;text-align:left;cursor:pointer;line-height:1.5;overflow-wrap:anywhere}
+.ol-title.want{font-size:18px}
+.ol-title:hover{text-decoration:underline;text-underline-offset:3px}
+.ol-tag{font-family:var(--display);font-size:13px;font-weight:400;border:1.5px solid var(--ink);border-radius:999px;padding:0 8px;line-height:1.5}
+.ol-tag.plain{border-style:dashed}
+.ol-body{margin:0;font-size:13.5px;color:var(--soft);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere;max-width:62ch}
+
+/* priority sheet */
+.prio-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.prio-row{position:relative;display:flex;align-items:center;gap:10px;padding:8px 10px;border:1.5px solid var(--ink);border-radius:16px;min-width:0;background:var(--paper);transition:background .4s;user-select:none;-webkit-user-select:none;cursor:grab}
+.prio-row button{cursor:pointer}
+.grip{flex:none;width:30px;height:36px;margin:-6px -6px -6px -4px;display:grid;place-items:center;cursor:grab;touch-action:none}
+.grip::before{content:"";width:14px;height:21px;background-image:radial-gradient(circle,var(--ink) 1.4px,transparent 1.8px);background-size:7px 7px}
+.prio-list.sorting,.prio-list.sorting .prio-row,.prio-list.sorting .grip{cursor:grabbing}
+.prio-list.sorting .prio-row{transition:transform .18s ease,background .4s}
+.prio-list.sorting .prio-row.dragging{transition:none;z-index:2;background:var(--butter);box-shadow:4px 4px 0 var(--shadow)}
+@media (max-width:440px){ .prio-row .mono{display:none} }
+.prio-row.moved{background:var(--butter)}
+.prio-n{flex:none;width:20px;text-align:right;font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums}
+.prio-row .chip{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.prio-row .mono{color:var(--soft);white-space:nowrap}
+.prio-btns{margin-left:auto;display:flex;align-items:center;gap:6px;flex:none}
+.pbtn{width:32px;height:32px;padding:0;border:1.5px solid var(--ink);border-radius:50%;background:var(--paper);color:var(--ink);cursor:pointer;display:grid;place-items:center;font-size:15px;line-height:1}
+.pbtn:hover:not(:disabled){box-shadow:2px 2px 0 var(--shadow)}
+.pbtn:disabled,.prio-btns .btn:disabled{opacity:.3;cursor:default;box-shadow:none}
+.btn.done{background:var(--mint)}
+#dActions #dDone{margin-right:auto}
+
+/* key */
+.key{display:flex;flex-direction:column;gap:14px;padding-top:6px}
+.key h2{font-family:var(--display);font-weight:400;font-size:24px;margin:0}
+.key-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px 28px}
+.key-item{display:flex;align-items:center;gap:14px;font-size:14px;line-height:1.5;min-width:0}
+.key-item b{display:block;font-family:var(--display);font-weight:400;font-size:17px}
+.mini{flex:none;width:54px;height:38px;position:relative}
+.mini i{position:absolute;display:block;border:1.5px solid var(--ink);background:var(--c)}
+.mini.drift i{--c:var(--lilac);width:34px;height:24px;top:7px;left:4px;border-radius:58% 42% 55% 45% / 47% 53% 47% 53%;animation:mini-drift 5s ease-in-out infinite alternate}
+.mini.wig i{--c:var(--pink);width:38px;height:26px;top:6px;left:8px;border-width:2px;--r1:62% 38% 46% 54% / 55% 45% 55% 45%;--r2:40% 60% 58% 42% / 42% 58% 42% 58%;border-radius:var(--r1);animation:wiggle 1.6s ease-in-out infinite alternate}
+.mini.prio i{width:15px;height:11px;border-radius:999px}
+.mini.prio i:nth-child(1){--c:var(--pink);left:3px;top:2px}
+.mini.prio i:nth-child(2){--c:var(--mint);left:20px;top:13px}
+.mini.prio i:nth-child(3){--c:var(--sky);left:37px;top:24px}
+.mini.seed i{--c:var(--sky);width:12px;height:12px;border-radius:50%}
+.mini.seed i:nth-child(1){top:6px;left:8px}
+.mini.seed i:nth-child(2){top:18px;left:26px;--c:var(--butter)}
+.mini.seed i:nth-child(3){top:8px;left:38px;--c:var(--pink)}
+@keyframes mini-drift{from{transform:translate(0,2px)}to{transform:translate(14px,-2px)}}
+.swatches{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:14px}
+.chip{display:inline-flex;align-items:center;padding:3px 12px;border:1.5px solid var(--ink);border-radius:999px;background:var(--c);font-family:var(--display);font-size:15px;line-height:1.4}
+
+/* sheets */
+.sheet{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:16px;padding-top:max(16px,env(safe-area-inset-top,0px));padding-bottom:max(16px,env(safe-area-inset-bottom,0px));background:var(--scrim)}
+.sheet-card{width:min(540px,100%);max-height:100%;overflow:auto;background:var(--paper);border:1.5px solid var(--ink);border-radius:26px;padding:24px;display:flex;flex-direction:column;gap:14px;box-shadow:6px 6px 0 var(--shadow)}
+.sheet-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.sheet-head .x{margin-left:auto}
+.x{width:36px;height:36px;border:1.5px solid var(--ink);border-radius:50%;background:var(--paper);cursor:pointer;display:grid;place-items:center;flex:none}
+.x:hover{box-shadow:2px 2px 0 var(--shadow)}
+.sheet h2{font-family:var(--display);font-weight:400;font-size:30px;line-height:1.2;margin:0;text-wrap:balance}
+.d-body{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.d-img{display:block;width:100%;max-height:340px;object-fit:contain;border:1.5px solid var(--ink);border-radius:16px;background:var(--paper)}
+.ex{font-family:var(--mono);font-size:11.5px;border:1.5px dashed var(--ink);border-radius:999px;padding:1px 9px}
+.status-row{display:flex;flex-direction:column;gap:6px}
+.lbl{font-size:13px;font-weight:600;letter-spacing:.04em}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.row.end{justify-content:flex-end}
+.confirm{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 14px;border:1.5px dashed var(--ink);border-radius:16px;background:var(--pink)}
+.confirm span{margin-right:auto}
+
+form.sheet-card label.lbl,form.sheet-card .lbl{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.lbl small{font-weight:400;letter-spacing:0;font-size:12.5px;color:var(--soft)}
+.input,.textarea{width:100%;border:1.5px solid var(--ink);border-radius:14px;padding:10px 14px;background:var(--paper)}
+.input{height:46px;font-size:16px}
+.textarea{min-height:110px;resize:vertical;line-height:1.6;font-size:15px}
+.input::placeholder,.textarea::placeholder{color:var(--soft)}
+.field{display:flex;flex-direction:column;gap:6px}
+.cats{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.cats label{position:relative;display:inline-flex}
+.cats input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.cats span{display:inline-block;padding:5px 14px;border:1.5px solid var(--ink);border-radius:999px;background:var(--c);cursor:pointer;font-family:var(--display);font-size:15.5px}
+.cats input:checked + span{box-shadow:3px 3px 0 var(--shadow)}
+.cats input:checked + span::before{content:"✓ "}
+.cats input:focus-visible + span{outline:2.5px solid var(--ink);outline-offset:3px}
+.catwrap{position:relative;display:inline-flex}
+.catwrap.custom label span{padding-right:20px}
+.catwrap .catx{position:absolute;top:-8px;right:-8px;z-index:1;min-width:20px;height:20px;padding:0;border:1.5px solid var(--ink);border-radius:999px;background:var(--paper);font-size:12px;line-height:1;cursor:pointer;display:grid;place-items:center;white-space:nowrap}
+.catwrap .catx:hover{background:var(--pink)}
+.catwrap .catx.armed{padding:0 7px;background:var(--pink);font-weight:700}
+.addcat{padding:5px 14px;border:1.5px dashed var(--ink);border-radius:999px;background:var(--paper);font-size:14px;cursor:pointer}
+.addcat:hover{background:var(--butter)}
+.addcat:disabled{cursor:not-allowed;background:var(--paper)}
+.newcat{display:flex;flex-direction:column;gap:12px;padding:14px;border:1.5px dashed var(--ink);border-radius:16px}
+.newcat .top-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.newcat .input{height:40px;font-size:15px;flex:1 1 160px;min-width:0}
+.palette{display:flex;flex-wrap:wrap;gap:9px}
+.palette label{position:relative;display:inline-flex}
+.palette input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.palette span{display:block;width:28px;height:28px;border-radius:50%;border:1.5px solid var(--ink);background:var(--c);cursor:pointer}
+.palette input:checked + span{box-shadow:0 0 0 3px var(--paper),0 0 0 4.5px var(--ink)}
+.palette input:focus-visible + span{outline:2.5px solid var(--ink);outline-offset:6px}
+.drop{position:relative;border:1.5px dashed var(--ink);border-radius:16px;padding:12px;display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.drop.over{background:var(--sky)}
+.drop input[type=file]{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.drop .hint{font-size:13px;color:var(--soft)}
+.preview{display:flex;align-items:center;gap:12px;width:100%}
+.preview img{width:72px;height:72px;object-fit:cover;border-radius:50%;border:1.5px solid var(--ink)}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:999px;font-size:14px;z-index:30;max-width:calc(100% - 32px);text-align:center}
+
+/* undo */
+.undo{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:30;display:flex;align-items:center;gap:12px;background:var(--ink);color:var(--paper);padding:7px 7px 7px 18px;border-radius:999px;font-size:14px;max-width:calc(100% - 32px)}
+.undo span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.undo .btn{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+.undo .btn:hover{box-shadow:none;background:var(--butter)}
+.undo:not([hidden]) ~ .toast{bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+
+/* select & delete */
+.btn.danger{background:var(--pink)}
+.selectbar{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:15;width:min(760px,calc(100% - 32px));background:var(--paper);border:1.5px solid var(--ink);border-radius:22px;box-shadow:4px 4px 0 var(--shadow);padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.sb-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.sb-count{margin-right:auto;font-weight:700;font-size:14px;font-variant-numeric:tabular-nums;min-width:0}
+body.selecting .wrap{padding-bottom:200px}
+body.selecting .toast,body.selecting .undo{bottom:auto;top:calc(16px + env(safe-area-inset-top,0px))}
+body.selecting .undo:not([hidden]) ~ .toast{bottom:auto;top:calc(72px + env(safe-area-inset-top,0px))}
+.card .tick{display:none}
+body.selecting .card .tick{display:grid;place-items:center;flex:none;width:24px;height:24px;margin-top:11px;border:1.5px solid var(--ink);border-radius:50%;background:var(--paper);font-size:13px;line-height:1}
+body.selecting .card[aria-pressed="true"]{background:var(--butter);box-shadow:3px 3px 0 var(--shadow)}
+body.selecting .card[aria-pressed="true"] .tick{background:var(--ink);color:var(--paper)}
+body.selecting .card[aria-pressed="true"] .tick::before{content:"✓"}
+
+/* anything sitting on a macaron fill keeps dark text, day or night */
+.blob,.chip,.fchip:not(.all),.cats span,.rank-dot,.qcat select,.btn.danger,.btn.done,.btn[aria-pressed="true"],.confirm,.soundbar,.prio-row.moved,.prio-list.sorting .prio-row.dragging,body.selecting .card[aria-pressed="true"],.drop.over,.menu .btn:hover,.addcat:hover,.catwrap .catx.armed,.catwrap .catx:hover,.ol-check:hover,.ol-check:focus-visible,.ol-check:disabled,.undo .btn:hover,.qmic:hover,.qmic.on{color:var(--on-pastel)}
+
+@media (max-width:640px){
+  .pond{height:500px;border-radius:22px}
+  .counts{margin-left:0;width:100%}
+  .search{max-width:none;flex-basis:100%}
+  .sheet-card{padding:20px}
+  .sheet h2{font-size:26px}
+}
+@media (prefers-reduced-motion:reduce){
+  .blob,.mini i{animation:none!important}
+  .fizz{display:none}
+}
+</style>
+<script>(function(){ var t = 'auto'; try { t = localStorage.getItem('fuxiang-theme-v1') || 'auto'; } catch(e) {} var h = new Date().getHours(); if (t === 'night' || (t !== 'day' && (h >= 19 || h < 6))) { document.documentElement.classList.add('night'); var m = document.querySelector('meta[name=theme-color]'); if (m) m.setAttribute('content', '#1f1c2a'); } })();</script>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <h1>浮想</h1>
+      <p>没空做的灵感，先放在这里漂着。</p>
+    </div>
+    <button class="btn" id="addBtn" data-write type="button" title="加图片、写详细内容">＋ 详细记录</button>
+  </header>
+
+  <form class="quick" id="quick" data-write autocomplete="off">
+    <label class="qcat" title="类别">
+      <select id="qCat" aria-label="类别"></select>
+    </label>
+    <input class="qinput" id="qText" maxlength="500" placeholder="想到什么？写一句，按回车就存好" aria-label="快速记下灵感" enterkeyhint="done">
+    <button class="btn primary" type="submit" id="qSave">存下</button>
+  </form>
+
+  <div class="toolbar">
+    <label class="search" for="q">
+      <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5.2" stroke="currentColor" stroke-width="1.6"/><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <input id="q" type="search" placeholder="找一个灵感：关键词、内容、类别" autocomplete="off" aria-label="搜索灵感">
+    </label>
+    <div class="seg" role="group" aria-label="查看方式">
+      <button type="button" id="vFloat" aria-pressed="true">漂浮</button>
+      <button type="button" id="vList" aria-pressed="false">列表</button>
+      <button type="button" id="vOutline" aria-pressed="false">大纲</button>
+    </div>
+    <div class="more" id="moreWrap">
+      <button class="btn" type="button" id="moreBtn" aria-haspopup="true" aria-expanded="false" aria-controls="moreMenu">更多 <span aria-hidden="true">▾</span></button>
+      <div class="menu" id="moreMenu" hidden>
+        <button class="btn" type="button" id="prioBtn" data-write>类别排序</button>
+        <button class="btn" type="button" id="selectBtn" data-write aria-pressed="false">选择删除</button>
+        <button class="btn" type="button" id="soundBtn" aria-pressed="false" aria-controls="soundbar">
+          <svg class="ico" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2.5 6h2.2L8 3.2v9.6L4.7 10H2.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path class="wave" d="M10.6 5.6a3.4 3.4 0 0 1 0 4.8M12.6 3.8a6 6 0 0 1 0 8.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span id="soundTxt">声音：关</span>
+        </button>
+        <button class="btn" type="button" id="stirBtn" title="让所有灵感冲一下，再慢慢停下来">搅一搅</button>
+        <button class="btn" type="button" id="stillBtn" aria-pressed="false">静止</button>
+        <div class="menu-row" role="group" aria-label="颜色">
+          <span class="menu-lbl">颜色</span>
+          <div class="seg" id="themeSeg">
+            <button type="button" data-t="auto" aria-pressed="true">自动</button>
+            <button type="button" data-t="day" aria-pressed="false">白天</button>
+            <button type="button" data-t="night" aria-pressed="false">夜晚</button>
+          </div>
+        </div>
+        <hr class="menu-sep">
+        <button class="btn" type="button" id="exportBtn">导出备份</button>
+        <button class="btn" type="button" id="importBtn" data-write>导入备份</button>
+        <button class="btn" type="button" id="privacyBtn">隐私说明</button>
+      </div>
+      <input type="file" id="importFile" accept=".json,application/json,text/plain" hidden>
+    </div>
+    <span class="counts" id="counts" aria-live="polite">灵感 0 · 想做 0 · 已完成 0</span>
+  </div>
+
+  <div class="filters" id="catKey" role="group" aria-label="按类别筛选"></div>
+
+  <div class="soundbar" id="soundbar" hidden>
+    <label class="slider" for="volSpring">泉水 <input type="range" id="volSpring" min="0" max="100" value="60"></label>
+    <label class="slider" for="volGurgle">咕噜 <input type="range" id="volGurgle" min="0" max="100" value="60"></label>
+    <span class="hint" id="soundHint" hidden>上次开着声音，点一下页面任何地方就会响。</span>
+  </div>
+
+  <section class="pond" id="pond" aria-label="灵感池">
+    <div class="fizz-layer" id="fizzLayer" aria-hidden="true"></div>
+    <div id="bubbles"></div>
+    <div class="peek" id="peek" hidden aria-hidden="true"></div>
+    <div class="empty" id="empty">
+      <div>
+        <h2 id="emptyTitle">正在打开灵感池…</h2>
+        <p id="emptyText">马上就好。</p>
+        <button class="btn primary" type="button" id="emptyAdd" data-write hidden>＋ 记下第一个灵感</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="list" id="list" hidden aria-label="灵感列表"></section>
+  <section class="outline" id="outline" hidden aria-label="灵感大纲"></section>
+
+  <div class="row" id="metaRow">
+    <button class="btn small" type="button" id="clearEx" data-write hidden>清除示例</button>
+  </div>
+
+  <section class="key" aria-labelledby="keyTitle">
+    <h2 id="keyTitle">怎么看这个池子</h2>
+    <div class="key-grid">
+      <div class="key-item"><span class="mini drift" aria-hidden="true"><i></i></span><span><b>慢慢飘</b>刚记下的灵感，速度很慢，形状轻轻变。</span></div>
+      <div class="key-item"><span class="mini wig" aria-hidden="true"><i></i></span><span><b>扭来扭去</b>标了「想做」的，池子里最显眼的就是它们。</span></div>
+      <div class="key-item"><span class="mini prio" aria-hidden="true"><i></i><i></i><i></i></span><span><b>越重要飘得越高</b>排在前面的类别飘在上面，在「更多 → 类别排序」里调整。</span></div>
+      <div class="key-item"><span class="mini seed" aria-hidden="true"><i></i><i></i><i></i></span><span><b>小圆点</b>超过 9 个灵感时，旧的缩成小点。鼠标放上去就能看到内容。</span></div>
+    </div>
+  </section>
+</div>
+
+<!-- detail -->
+<div class="sheet" id="detail" hidden role="dialog" aria-modal="true" aria-labelledby="dTitle">
+  <div class="sheet-card">
+    <div class="sheet-head">
+      <span class="chip" id="dCat"></span>
+      <span class="mono" id="dDate"></span>
+      <span class="ex" id="dEx" hidden>示例</span>
+      <button class="x" type="button" data-close aria-label="关闭">✕</button>
+    </div>
+    <h2 id="dTitle"></h2>
+    <img class="d-img" id="dImg" alt="" hidden>
+    <p class="d-body" id="dBody"></p>
+    <div class="status-row">
+      <span class="lbl">现在的状态</span>
+      <div class="seg" role="group" aria-label="状态" id="dStatus">
+        <button type="button" data-s="new" aria-pressed="false">灵感</button>
+        <button type="button" data-s="want" aria-pressed="false">想做</button>
+      </div>
+    </div>
+    <div class="row end" id="dActions" data-write>
+      <button class="btn small done" type="button" id="dDone" title="做完就从池子里拿掉，10 秒内可以撤销">✓ 做完了</button>
+      <button class="btn small" type="button" id="dEdit">编辑</button>
+      <button class="btn small" type="button" id="dDel">删除</button>
+    </div>
+    <div class="confirm" id="dConfirm" hidden>
+      <span>确定删除这个灵感吗？</span>
+      <button class="btn small" type="button" id="dDelNo">先不删</button>
+      <button class="btn small primary" type="button" id="dDelYes">删除</button>
+    </div>
+  </div>
+</div>
+
+<!-- composer -->
+<div class="sheet" id="composer" hidden role="dialog" aria-modal="true" aria-labelledby="cHead">
+  <form class="sheet-card" id="cForm" novalidate>
+    <div class="sheet-head">
+      <h2 id="cHead">记下一个灵感</h2>
+      <button class="x" type="button" data-close aria-label="关闭">✕</button>
+    </div>
+    <div class="field">
+      <label class="lbl" for="cTitle">关键词 <small>几个字就好，会写在泡泡上；不填就用详细想法的开头</small></label>
+      <input class="input" id="cTitle" maxlength="14" placeholder="比如：雨后的影子" autocomplete="off">
+    </div>
+    <div class="field">
+      <label class="lbl" for="cBody">详细想法 <small>当时看到了什么，想做成什么样</small></label>
+      <textarea class="textarea" id="cBody" rows="4" placeholder="写多写少都可以，以后打开时会看到全文。"></textarea>
+    </div>
+    <div class="field">
+      <span class="lbl" id="cCatLbl">类别</span>
+      <div class="cats" id="cCats" role="radiogroup" aria-labelledby="cCatLbl"></div>
+      <div class="newcat" id="newCat" hidden>
+        <div class="top-row">
+          <input class="input" id="ncName" maxlength="6" placeholder="类别名，比如：摄影" autocomplete="off" aria-label="新类别的名字">
+          <span class="chip" id="ncPreview">新类别</span>
+        </div>
+        <div class="palette" id="ncColors" role="radiogroup" aria-label="类别颜色"></div>
+        <div class="row end">
+          <button class="btn small" type="button" id="ncCancel">取消</button>
+          <button class="btn small primary" type="button" id="ncAdd">添加类别</button>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <span class="lbl">图片 <small>可选</small></span>
+      <div class="drop" id="drop">
+        <input type="file" id="cFile" accept="image/*">
+        <div class="preview" id="cPreview" hidden>
+          <img id="cPreviewImg" alt="已选的图片">
+          <button class="btn small" type="button" id="cRemoveImg">去掉这张图</button>
+        </div>
+        <label class="btn small" for="cFile" id="cPick">选一张图</label>
+        <span class="hint" id="cHint">也可以把图片拖进来，或直接粘贴</span>
+      </div>
+    </div>
+    <div class="row end">
+      <button class="btn" type="button" data-close>取消</button>
+      <button class="btn primary" type="submit" id="cSave">放进池子</button>
+    </div>
+  </form>
+</div>
+
+<!-- category priority -->
+<div class="sheet" id="prio" hidden role="dialog" aria-modal="true" aria-labelledby="pHead">
+  <div class="sheet-card">
+    <div class="sheet-head">
+      <h2 id="pHead">类别排序</h2>
+      <button class="x" type="button" data-close aria-label="关闭">✕</button>
+    </div>
+    <p class="note">按住左边的小点点上下拖动来排序（电脑上也可以直接拖整行）。越靠前越重要：列表和大纲里排在最上面，漂浮池子里飘得最高；池子放不下时，也先给它们留大泡泡。</p>
+    <ol class="prio-list" id="prioList"></ol>
+  </div>
+</div>
+
+<!-- privacy -->
+<div class="sheet" id="privacy" hidden role="dialog" aria-modal="true" aria-labelledby="pvHead">
+  <div class="sheet-card">
+    <div class="sheet-head">
+      <h2 id="pvHead">隐私说明</h2>
+      <button class="x" type="button" data-close aria-label="关闭">✕</button>
+    </div>
+    <div class="pv">
+      <p>「浮想」不收集、也不上传你的任何信息。</p>
+      <p>你记下的灵感、图片、类别和设置，只保存在这台设备上。没有账号，没有广告，没有统计分析，也不会把数据发给开发者或任何其他人。</p>
+      <p>添加图片时，只会读取你选的那一张，压缩后存进这条灵感里。</p>
+      <p>从主屏幕删掉「浮想」，或者在设置里清除 Safari 的网站数据，都会删掉里面的灵感。想留一份，可以在「更多 → 导出备份」里自己保存，备份文件存到哪里由你决定。</p>
+      <p class="note">更新于 2026 年 10 月</p>
+    </div>
+  </div>
+</div>
+
+<div class="undo" id="undo" role="status" hidden>
+  <span id="undoText">已删除</span>
+  <button class="btn small" type="button" id="undoBtn">撤销</button>
+</div>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<div class="selectbar" id="selectbar" role="region" aria-label="选择删除" hidden>
+  <div class="sb-row">
+    <span class="sb-count" id="selCount" aria-live="polite">点卡片选择要删除的灵感</span>
+    <button class="btn small" type="button" id="selAll">全选</button>
+    <button class="btn small danger" type="button" id="selDel" disabled>删除所选</button>
+    <button class="btn small danger" type="button" id="selWipe">全部删除</button>
+    <button class="btn small primary" type="button" id="selDone">完成</button>
+  </div>
+  <div class="confirm" id="wipeConfirm" hidden>
+    <span id="wipeText">确定删除全部灵感吗？</span>
+    <button class="btn small" type="button" id="wipeNo">先不删</button>
+    <button class="btn small primary" type="button" id="wipeYes">全部删除</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  const $ = s => document.querySelector(s);
+  const pond = $('#pond'), layer = $('#bubbles');
+  const BASE_CATS = {
+    draw:{name:'画画', v:'--pink'}, craft:{name:'手作', v:'--mint'},
+    words:{name:'文字', v:'--lilac'}, sound:{name:'声音', v:'--sky'}, muse:{name:'随想', v:'--butter'}
+  };
+  const PALETTE = ['pink','mint','lilac','sky','butter','peach','aqua','sage','coral','periwinkle','sand'];
+  const COLOR_NAMES = {pink:'粉色', mint:'薄荷绿', lilac:'淡紫', sky:'天蓝', butter:'奶油黄', peach:'蜜桃', aqua:'水蓝', sage:'草绿', coral:'珊瑚粉', periwinkle:'长春花蓝', sand:'沙色'};
+  let CATS = {};
+  Object.keys(BASE_CATS).forEach((k, i) => { CATS[k] = Object.assign({}, BASE_CATS[k], { rank: i }); });
+  let customCats = [];
+  let catOrder = [], orderPending = false, orderTimer = 0;
+  let bandOf = new Map(), boostUntil = 0;
+  let catFilter = null;
+  let doneIds = new Set();
+  let bandSig = '', rescatterPending = false;
+  const STATUS = {new:'灵感', want:'想做', done:'做完了'};
+  const CAP = 9;
+  const SHELF = 0;
+
+  let ideas = [];
+  let store = null;
+  let loaded = false;
+  let scattered = false;
+  let readOnly = false;
+  let view = 'float';
+  let still = false;
+  try { still = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch(e) {}
+  let query = '';
+  const nodes = new Map();
+
+  /* ---------- helpers ---------- */
+  function hash(s){ let h = 2166136261; for (let i = 0; i < s.length; i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+  function rng(seed){ let s = (seed || 1) >>> 0; return () => { s ^= s << 13; s >>>= 0; s ^= s >>> 17; s ^= s << 5; s >>>= 0; return (s % 100000) / 100000; }; }
+  function radii(r){ const p = () => Math.round(36 + r() * 28); const a=p(), b=p(), c=p(), d=p(); return `${a}% ${100-a}% ${b}% ${100-b}% / ${c}% ${d}% ${100-d}% ${100-c}%`; }
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  function fmtDate(ms){ if (!ms) return ''; const d = new Date(ms); return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`; }
+  let toastTimer = 0;
+  function toast(msg){ const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, 2800); }
+
+  /* ---------- sound ---------- */
+  let reduceMotion = false;
+  try { reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch(e) {}
+  const fizzLayer = $('#fizzLayer');
+  function fizz(count, gapMs){
+    if (view !== 'float' || still || reduceMotion || !fizzLayer) return;
+    const W = pond.clientWidth, H = pond.clientHeight;
+    if (!W) return;
+    const x0 = 40 + Math.random() * Math.max(1, W - 80);
+    for (let i = 0; i < count; i++){
+      setTimeout(() => {
+        const s = 6 + Math.random() * 9;
+        const el = document.createElement('span');
+        el.className = 'fizz';
+        el.style.left = (x0 + (Math.random() - 0.5) * 26 - s / 2).toFixed(1) + 'px';
+        el.style.top = (H - SHELF - s - 4).toFixed(1) + 'px';
+        el.style.setProperty('--s', s.toFixed(1) + 'px');
+        el.style.setProperty('--dx', ((Math.random() - 0.5) * 40).toFixed(1) + 'px');
+        el.style.setProperty('--dy', (-(90 + Math.random() * 140)).toFixed(1) + 'px');
+        el.style.setProperty('--d', (1.4 + Math.random() * 0.9).toFixed(2) + 's');
+        el.addEventListener('animationend', () => el.remove());
+        fizzLayer.appendChild(el);
+      }, i * gapMs);
+    }
+  }
+
+  // visual ripples were tried and removed; the sounds that go with each moment stay
+  function ripple(){}
+
+  const Sound = (function(){
+    const KEY = 'fuxiang-sound-v1';
+    const PITCH = { draw: 520, craft: 440, words: 600, sound: 680, muse: 390 };
+    let ctx = null, master = null, springGain = null, gurgleGain = null, verb = null;
+    let want = false, on = false, trickleTimer = 0, gurgleTimer = 0;
+    const vol = { spring: 60, gurgle: 60 };
+    const btn = $('#soundBtn'), txt = $('#soundTxt'), bar = $('#soundbar'), hint = $('#soundHint');
+    const sSpring = $('#volSpring'), sGurgle = $('#volGurgle');
+    const R = (a, b) => a + Math.random() * (b - a);
+    const level = v => Math.pow(v / 100, 2) * 1.6;
+    const quiet = p => { if (p && typeof p.catch === 'function') p.catch(() => {}); };
+
+    function load(){
+      try {
+        const v = JSON.parse(localStorage.getItem(KEY) || 'null');
+        if (v && typeof v === 'object'){
+          if (Number.isFinite(v.spring)) vol.spring = Math.max(0, Math.min(100, v.spring));
+          if (Number.isFinite(v.gurgle)) vol.gurgle = Math.max(0, Math.min(100, v.gurgle));
+          want = !!v.on;
+        }
+      } catch(e) {}
+    }
+    function save(){ try { localStorage.setItem(KEY, JSON.stringify({ on: want, spring: vol.spring, gurgle: vol.gurgle })); } catch(e) {} }
+    function render(){
+      btn.setAttribute('aria-pressed', String(want));
+      txt.textContent = want ? '声音：开' : '声音：关';
+      bar.hidden = !want;
+      hint.hidden = !(want && !on);
+    }
+
+    function noise(sec, brown){
+      const sr = ctx.sampleRate, len = Math.floor(sr * sec);
+      const buf = ctx.createBuffer(1, len, sr), d = buf.getChannelData(0);
+      let last = 0;
+      for (let i = 0; i < len; i++){
+        const w = Math.random() * 2 - 1;
+        if (brown){ last = (last + 0.02 * w) / 1.02; d[i] = last * 3.5; } else d[i] = w;
+      }
+      const f = Math.floor(sr * 0.05);
+      for (let i = 0; i < f; i++){ const k = i / f; d[len - f + i] = d[len - f + i] * (1 - k) + d[i] * k; }
+      return buf;
+    }
+    function loopSource(buf){
+      const s = ctx.createBufferSource();
+      s.buffer = buf; s.loop = true;
+      s.loopStart = 0.05; s.loopEnd = buf.duration;
+      return s;
+    }
+    function impulse(sec, decay){
+      const sr = ctx.sampleRate, len = Math.floor(sr * sec), b = ctx.createBuffer(2, len, sr);
+      for (let c = 0; c < 2; c++){
+        const d = b.getChannelData(c);
+        for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, decay);
+      }
+      return b;
+    }
+    function build(){
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return false;
+      try { ctx = new AC(); } catch(e) { ctx = null; return false; }
+      const comp = ctx.createDynamicsCompressor();
+      comp.threshold.value = -18; comp.ratio.value = 4;
+      master = ctx.createGain(); master.gain.value = 0;
+      master.connect(comp); comp.connect(ctx.destination);
+
+      verb = ctx.createConvolver(); verb.buffer = impulse(1.8, 3);
+      const wet = ctx.createGain(); wet.gain.value = 0.3;
+      verb.connect(wet); wet.connect(master);
+
+      springGain = ctx.createGain(); springGain.gain.value = level(vol.spring);
+      springGain.connect(master);
+      const springSend = ctx.createGain(); springSend.gain.value = 0.25;
+      springGain.connect(springSend); springSend.connect(verb);
+
+      gurgleGain = ctx.createGain(); gurgleGain.gain.value = level(vol.gurgle);
+      gurgleGain.connect(master); gurgleGain.connect(verb);
+
+      // low, soft rush of the spring
+      const brown = loopSource(noise(6, true));
+      const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 650; lp.Q.value = 0.6;
+      const lpLfo = ctx.createOscillator(); lpLfo.frequency.value = 0.07;
+      const lpDepth = ctx.createGain(); lpDepth.gain.value = 240;
+      lpLfo.connect(lpDepth); lpDepth.connect(lp.frequency);
+      const low = ctx.createGain(); low.gain.value = 0.5;
+      brown.connect(lp); lp.connect(low); low.connect(springGain);
+
+      // thin, bright hiss of moving water
+      const white = loopSource(noise(5, false));
+      const bp = ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 2300; bp.Q.value = 0.8;
+      const bpLfo = ctx.createOscillator(); bpLfo.frequency.value = 0.13;
+      const bpDepth = ctx.createGain(); bpDepth.gain.value = 500;
+      bpLfo.connect(bpDepth); bpDepth.connect(bp.frequency);
+      const hiss = ctx.createGain(); hiss.gain.value = 0.04;
+      white.connect(bp); bp.connect(hiss); hiss.connect(springGain);
+
+      brown.start(); white.start(); lpLfo.start(); bpLfo.start();
+      return true;
+    }
+    // one water bubble: a sine whose pitch rises as it reaches the surface
+    function blip(bus, t, f, dur, peak, rise, pan){
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(f, t);
+      o.frequency.exponentialRampToValueAtTime(f * rise, t + dur);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(peak, t + 0.006);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g);
+      let out = g;
+      if (pan && ctx.createStereoPanner){
+        const p = ctx.createStereoPanner(); p.pan.value = Math.max(-1, Math.min(1, pan));
+        g.connect(p); out = p;
+      }
+      out.connect(bus);
+      o.start(t); o.stop(t + dur + 0.03);
+    }
+    const ready = () => on && ctx && ctx.state === 'running';
+
+    function trickle(){
+      if (!ready() || document.hidden) return;
+      const now = ctx.currentTime;
+      const n = Math.random() < 0.55 ? 1 : (Math.random() < 0.3 ? 2 : 0);
+      for (let i = 0; i < n; i++){
+        const f = 700 + Math.pow(Math.random(), 1.6) * 2200;
+        blip(springGain, now + R(0.03, 0.15), f, R(0.025, 0.07), R(0.012, 0.045), R(1.5, 2.6), R(-0.7, 0.7));
+      }
+    }
+    function cluster(o){
+      if (!ready()) return 0;
+      const n = o.n || 4, gap = o.gap || 0.11;
+      let f = o.base || 300, t = ctx.currentTime + 0.02;
+      for (let i = 0; i < n; i++){
+        blip(gurgleGain, t, f * R(0.88, 1.12), R(0.08, 0.16), (o.peak || 0.14) * R(0.7, 1), R(1.25, 1.6), R(-0.3, 0.3));
+        t += gap * R(0.7, 1.3);
+        f *= o.dir === 'sink' ? 0.88 : o.dir === 'rise' ? 1.1 : R(0.9, 1.1);
+      }
+      return n;
+    }
+    function gurgleLoop(){
+      gurgleTimer = setTimeout(gurgleLoop, R(3500, 9000));
+      if (!ready() || document.hidden) return;
+      const n = Math.round(R(3, 6));
+      cluster({ n, base: R(180, 360), gap: 0.12, peak: 0.13 });
+      fizz(n, 120);
+    }
+    function start(){
+      if (on) return;
+      if (!ctx && !build()){
+        want = false; save(); render();
+        toast('这个浏览器放不了声音');
+        return;
+      }
+      on = true;
+      try { quiet(ctx.resume()); } catch(e) {}
+      const t = ctx.currentTime;
+      master.gain.cancelScheduledValues(t);
+      master.gain.setValueAtTime(master.gain.value, t);
+      master.gain.setTargetAtTime(1, t, 0.6);
+      clearInterval(trickleTimer); clearTimeout(gurgleTimer);
+      trickleTimer = setInterval(trickle, 120);
+      gurgleTimer = setTimeout(gurgleLoop, 1200);
+      render();
+    }
+    function stop(){
+      clearInterval(trickleTimer); clearTimeout(gurgleTimer);
+      if (!on){ render(); return; }
+      on = false;
+      const t = ctx.currentTime;
+      master.gain.cancelScheduledValues(t);
+      master.gain.setValueAtTime(master.gain.value, t);
+      master.gain.setTargetAtTime(0, t, 0.15);
+      setTimeout(() => { if (!on && ctx){ try { quiet(ctx.suspend()); } catch(e) {} } }, 900);
+      render();
+    }
+    function nudge(){
+      if (!want) return;
+      if (!on) start();
+      else if (ctx && ctx.state !== 'running' && !document.hidden){ try { quiet(ctx.resume()); } catch(e) {} }
+    }
+    function setVol(kind, v){
+      vol[kind] = v;
+      const g = kind === 'spring' ? springGain : gurgleGain;
+      if (g && ctx) g.gain.setTargetAtTime(level(v), ctx.currentTime, 0.08);
+    }
+    function init(){
+      load();
+      sSpring.value = vol.spring; sGurgle.value = vol.gurgle;
+      render();
+      document.addEventListener('click', nudge, true);
+      document.addEventListener('keydown', nudge, true);
+      btn.addEventListener('click', () => {
+        want = !want; save();
+        if (want) start(); else stop();
+      });
+      sSpring.addEventListener('input', () => setVol('spring', +sSpring.value));
+      sGurgle.addEventListener('input', () => setVol('gurgle', +sGurgle.value));
+      sSpring.addEventListener('change', save);
+      sGurgle.addEventListener('change', () => { save(); cluster({ n: 3, base: 300, gap: 0.1 }); });
+      document.addEventListener('visibilitychange', () => {
+        if (!ctx || !on) return;
+        try { quiet(document.hidden ? ctx.suspend() : ctx.resume()); } catch(e) {}
+      });
+    }
+    return {
+      init,
+      tap(cat){
+        if (!ready()) return;
+        const f = PITCH[cat] || 480, t = ctx.currentTime + 0.01;
+        blip(gurgleGain, t, f, 0.13, 0.16, 1.5, 0);
+        blip(gurgleGain, t + 0.07, f * 1.3, 0.09, 0.07, 1.6, 0);
+      },
+      arrive(){ const n = cluster({ n: 5, base: 260, gap: 0.08, dir: 'rise', peak: 0.15 }); if (n) fizz(n, 80); },
+      markWant(){ cluster({ n: 2, base: 440, gap: 0.09, dir: 'rise', peak: 0.13 }); },
+      done(){ cluster({ n: 6, base: 380, gap: 0.13, dir: 'sink', peak: 0.15 }); },
+      stir(){
+        if (!ready()) return;
+        const t0 = ctx.currentTime + 0.02;
+        for (let i = 0; i < 14; i++) blip(gurgleGain, t0 + R(0, 0.9), R(240, 900), R(0.06, 0.14), R(0.06, 0.13), R(1.3, 1.9), R(-0.8, 0.8));
+        fizz(9, 70);
+      },
+      pop(){ if (ready()) blip(gurgleGain, ctx.currentTime + 0.01, 950, 0.05, 0.12, 2.4, 0); }
+    };
+  })();
+
+  /* ---------- storage: everything lives in one file on this iPhone ---------- */
+  const capCache = {};
+  // native plugins are reached through the bridge Capacitor injects; in a plain browser this returns null
+  function capPlugin(name){
+    if (Object.prototype.hasOwnProperty.call(capCache, name)) return capCache[name];
+    let p = null;
+    try {
+      const C = window.Capacitor;
+      if (C && typeof C.isNativePlatform === 'function' && C.isNativePlatform()){
+        if (C.Plugins && C.Plugins[name]) p = C.Plugins[name];
+        else if (typeof C.registerPlugin === 'function') p = C.registerPlugin(name);
+        else if (window.capacitorExports && typeof window.capacitorExports.registerPlugin === 'function') p = window.capacitorExports.registerPlugin(name);
+      }
+    } catch(e) { p = null; }
+    capCache[name] = p;
+    return p;
+  }
+  function fileBackend(fs){
+    const path = 'fuxiang-data.json';
+    return {
+      async read(){
+        try {
+          const r = await fs.readFile({ path, directory: 'DATA', encoding: 'utf8' });
+          return { status: 'ok', text: typeof r.data === 'string' ? r.data : '' };
+        } catch(e){
+          // tell "no file yet" apart from "file exists but could not be read", so a hiccup never overwrites real data
+          try { await fs.stat({ path, directory: 'DATA' }); return { status: 'error' }; }
+          catch(e2){ return { status: 'missing' }; }
+        }
+      },
+      async write(text){ await fs.writeFile({ path, data: text, directory: 'DATA', encoding: 'utf8', recursive: true }); },
+      async keepCopy(text){
+        try { await fs.writeFile({ path: 'fuxiang-data.bak.json', data: text, directory: 'DATA', encoding: 'utf8', recursive: true }); } catch(e) {}
+      }
+    };
+  }
+  function localBackend(){
+    const KEY = 'fuxiang-app-v1';
+    const lsGet = () => { try { return localStorage.getItem(KEY); } catch(e) { return null; } };
+    if (!window.indexedDB){
+      return {
+        async read(){ const t = lsGet(); return t == null ? { status: 'missing' } : { status: 'ok', text: t }; },
+        async write(text){ localStorage.setItem(KEY, text); },
+        async keepCopy(){}
+      };
+    }
+    let dbp = null;
+    const openDb = () => dbp || (dbp = new Promise((res, rej) => {
+      const rq = indexedDB.open('fuxiang', 1);
+      rq.onupgradeneeded = () => rq.result.createObjectStore('kv');
+      rq.onsuccess = () => res(rq.result);
+      rq.onerror = () => { dbp = null; rej(rq.error); };
+      rq.onblocked = () => { dbp = null; rej(new Error('blocked')); };
+    }));
+    const run = (mode, fn) => openDb().then(db => new Promise((res, rej) => {
+      const t = db.transaction('kv', mode);
+      const rq = fn(t.objectStore('kv'));
+      t.oncomplete = () => res(rq.result);
+      t.onerror = () => rej(t.error);
+      t.onabort = () => rej(t.error);
+    }));
+    let asked = false;
+    return {
+      async read(){
+        let v;
+        try { v = await run('readonly', st => st.get(KEY)); }
+        catch(e){ return { status: 'error' }; }   // never start over on top of data we merely failed to read
+        if (typeof v === 'string') return { status: 'ok', text: v };
+        const t = lsGet();
+        return t == null ? { status: 'missing' } : { status: 'ok', text: t };
+      },
+      async write(text){
+        await run('readwrite', st => st.put(text, KEY));
+        if (!asked){
+          asked = true;
+          try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {}); } catch(e) {}
+        }
+      },
+      async keepCopy(text){ try { await run('readwrite', st => st.put(text, KEY + '.bak')); } catch(e) {} }
+    };
+  }
+  async function initStore(){
+    const fs = capPlugin('Filesystem');
+    return appStore(fs ? fileBackend(fs) : localBackend());
+  }
+  function newId(prefix){ return prefix + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+  function firstRunIdeas(){
+    const now = Date.now(), hour = 3600000;
+    const make = (title, body, cat, status, ago) => ({ id: newId('ex'), title, body, cat, status, image: null, createdAt: now - ago * hour, example: true });
+    return [
+      make('雨后的影子', '路灯和树的影子被水坑拉长。只用黑白两色，加一点淡粉。', 'draw', 'want', 2),
+      make('旧毛衣小怪兽', '把不穿的旧毛衣剪开，缝成几只软软的小怪兽，眼睛用不同颜色的纽扣。', 'craft', 'new', 9),
+      make('一句话日记', '每天只写一句话，记下当天最小的一件开心事。', 'words', 'new', 20),
+      make('早上的鸟叫', '六点左右楼下有三种鸟叫声，录下来做成一分钟的声音拼贴。', 'sound', 'new', 33),
+      make('南瓜配色', '橘色配薄荷绿和一点紫，比橘配黑更可爱。', 'muse', 'want', 48),
+      make('窗台上的猫', '邻居家的猫每天下午三点在窗台晒太阳，画一个速写系列。', 'draw', 'new', 70)
+    ];
+  }
+  function appStore(backend){
+    let state = { ideas: [], cats: [], order: [], done: [] };
+    const subs = { ideas: [], cats: [], order: [], done: [] };
+    let saveTimer = 0, writable = true;
+    const copy = o => JSON.parse(JSON.stringify(o));
+    function emit(k){
+      const val = k === 'order' ? state.order.slice() : k === 'done' ? state.done.map(d => d.id) : copy(state[k]);
+      subs[k].forEach(f => { try { f(val); } catch(e) {} });
+    }
+    function save(){ clearTimeout(saveTimer); saveTimer = setTimeout(flush, 250); }
+    async function flush(){
+      clearTimeout(saveTimer); saveTimer = 0;
+      if (!writable) return;
+      try { await backend.write(JSON.stringify(Object.assign({ app: 'fuxiang', v: 1, savedAt: Date.now() }, state))); }
+      catch(e){ toast('没存上，设备空间可能不够了'); }
+    }
+    document.addEventListener('visibilitychange', () => { if (document.hidden && saveTimer) flush(); });
+    window.addEventListener('pagehide', () => { if (saveTimer) flush(); });
+    function take(s){
+      const arr = v => Array.isArray(v) ? v.filter(x => x && typeof x === 'object' && typeof x.id === 'string') : [];
+      return { ideas: arr(s.ideas), cats: arr(s.cats), order: Array.isArray(s.order) ? s.order.filter(k => typeof k === 'string') : [], done: arr(s.done) };
+    }
+    const ready = (async () => {
+      const r = await backend.read();
+      if (r.status === 'ok'){
+        try { state = take(JSON.parse(r.text || '{}')); backend.keepCopy(r.text); }
+        catch(e){ writable = false; toast('灵感文件读不出来，先不动它。请联系开发者。'); }
+      } else if (r.status === 'error'){
+        writable = false; toast('灵感暂时读不出来，关掉浮想再打开试试');
+      } else {
+        state.ideas = firstRunIdeas();
+        await flush();
+      }
+    })();
+    const mutate = fn => { fn(); save(); };
+    return {
+      mode: 'app',
+      ready,
+      // ideas arrive one tick after categories and order, so bubbles start at the right heights
+      subscribe(cb){ subs.ideas.push(cb); ready.then(() => setTimeout(() => emit('ideas'), 0)); return () => {}; },
+      async add(d){ await ready; const id = newId('i'); mutate(() => state.ideas.push(Object.assign({}, copy(d), { id }))); emit('ideas'); return id; },
+      async update(id, d){ await ready; const it = state.ideas.find(x => x.id === id); if (!it) return; mutate(() => Object.assign(it, copy(d))); emit('ideas'); },
+      async remove(id){ await ready; mutate(() => { state.ideas = state.ideas.filter(x => x.id !== id); }); emit('ideas'); },
+      async restore(id, d){ await ready; if (!state.ideas.some(x => x.id === id)) mutate(() => state.ideas.push(Object.assign({}, copy(d), { id }))); emit('ideas'); },
+      subscribeCats(cb){ subs.cats.push(cb); ready.then(() => emit('cats')); return () => {}; },
+      async setCat(id, d){ await ready; mutate(() => { state.cats = state.cats.filter(x => x.id !== id); state.cats.push(Object.assign({}, copy(d), { id })); }); emit('cats'); },
+      async removeCat(id){ await ready; mutate(() => { state.cats = state.cats.filter(x => x.id !== id); }); emit('cats'); },
+      subscribeOrder(cb){ subs.order.push(cb); ready.then(() => emit('order')); return () => {}; },
+      async setOrder(order){ await ready; mutate(() => { state.order = order.slice(); }); emit('order'); },
+      subscribeDone(cb){ subs.done.push(cb); ready.then(() => emit('done')); return () => {}; },
+      async setDone(id, d){ await ready; mutate(() => { state.done = state.done.filter(x => x.id !== id); state.done.push(Object.assign({}, copy(d), { id })); }); emit('done'); },
+      async removeDone(id){ await ready; mutate(() => { state.done = state.done.filter(x => x.id !== id); }); emit('done'); },
+      exportText(){ return JSON.stringify(Object.assign({ app: 'fuxiang', v: 1, exportedAt: new Date().toISOString() }, state), null, 1); },
+      async importData(obj){
+        await ready;
+        const s = take(obj || {});
+        let n = 0, c = 0;
+        mutate(() => {
+          for (const i of s.ideas){ if (i.title && !state.ideas.some(x => x.id === i.id)){ state.ideas.push(i); n++; } }
+          for (const k of s.cats){ if (!state.cats.some(x => x.id === k.id)){ state.cats.push(k); c++; } }
+          for (const d of s.done){ if (!state.done.some(x => x.id === d.id)) state.done.push(d); }
+          if (!state.order.length && s.order.length) state.order = s.order;
+        });
+        ['cats', 'order', 'done'].forEach(emit);
+        setTimeout(() => emit('ideas'), 0);
+        await flush();
+        return { ideas: n, cats: c };
+      }
+    };
+  }
+
+  async function write(fn){
+    if (readOnly){ toast('这个灵感池你只能看，不能改'); return false; }
+    try { await fn(); return true; }
+    catch(e){
+      const code = e && e.code;
+      if (code === 'unavailable'){
+        await sleep(400 + Math.random() * 600);
+        try { await fn(); return true; } catch(e2) {}
+        toast('网络不太稳，没存上，等一下再试');
+        return false;
+      }
+      if (code === 'quota_exceeded'){ toast('灵感池满了，删掉一些旧的再放新的'); return false; }
+      if (code === 'invalid_argument' || code === 'revoked' || code === 'not_granted'){ setReadOnly(true); toast('你只有查看权限，改不了这个灵感池'); return false; }
+      toast('没存上，再试一次');
+      return false;
+    }
+  }
+  function setReadOnly(v){
+    readOnly = v;
+    if (v && selecting){ busy = false; exitSelect(true); }
+    document.querySelectorAll('[data-write]').forEach(el => { el.hidden = v; });
+    renderEmpty(); renderExamples(); renderViews();
+    document.querySelectorAll('#dStatus button').forEach(b => b.disabled = v);
+  }
+
+  /* ---------- nodes ---------- */
+  function makeNode(idea){
+    const el = document.createElement('button');
+    el.type = 'button'; el.className = 'node';
+    const r = rng(hash(idea.id));
+    const n = { id: idea.id, el, x: 0, y: 0, vx: 0, vy: 0, w: 40, h: 40, tx: 0, ty: 0,
+      ph: r() * 6.283, ph2: r() * 6.283, ph3: r() * 6.283,
+      delay: (-r() * 14).toFixed(2) + 's', sig: '', hover: false, spawn: false, kind: 'full' };
+    el.style.setProperty('--r1', radii(r));
+    el.style.setProperty('--r2', radii(r));
+    el.addEventListener('click', () => {
+      if (n.justDragged){ n.justDragged = false; return; }
+      const cat = n.idea && n.idea.cat;
+      // on a phone the first tap shows the card; a second tap (or tapping the card) opens it
+      if ((n.lastPointer === 'touch' || n.lastPointer === 'pen') && peekNode !== n){
+        showPeekNow(n, true); Sound.tap(cat); ripple(n.x, n.y, cat);
+        return;
+      }
+      hidePeek(); Sound.tap(cat); ripple(n.x, n.y, cat); openDetail(n.id);
+    });
+    el.addEventListener('keydown', () => { n.lastPointer = 'key'; });
+    el.addEventListener('contextmenu', e => { if (n.lastPointer !== 'mouse') e.preventDefault(); });
+    el.addEventListener('pointerdown', e => nodeDown(e, n));
+    el.addEventListener('pointermove', nodeMove);
+    el.addEventListener('pointerup', nodeUp);
+    el.addEventListener('pointercancel', nodeUp);
+    el.addEventListener('pointerenter', e => { n.hover = true; if (e.pointerType === 'mouse') showPeek(n); });
+    el.addEventListener('pointerleave', () => { n.hover = false; hidePeek(n); });
+    el.addEventListener('focus', () => { n.hover = true; try { if (el.matches(':focus-visible')) showPeek(n); } catch(e) {} });
+    el.addEventListener('blur', () => { n.hover = false; hidePeek(n); });
+    return n;
+  }
+  function paintNode(n, idea, kind){
+    const sig = [idea.title, idea.cat, (CATS[idea.cat] || CATS.muse).v, idea.status, kind, idea.image ? idea.image.length : 0].join('|');
+    if (sig === n.sig) return;
+    n.sig = sig;
+    n.el.hidden = kind === 'hidden';
+    if (kind === 'hidden') return;
+    const c = CATS[idea.cat] || CATS.muse;
+    const st = idea.status || 'new';
+    n.el.dataset.kind = kind;
+    n.el.dataset.status = st;
+    n.el.style.setProperty('--c', `var(${c.v})`);
+    n.el.setAttribute('aria-label', `${idea.title}（${c.name}，${STATUS[st] || '灵感'}）`);
+    if (kind === 'seed') n.el.title = idea.title; else n.el.removeAttribute('title');
+    n.el.textContent = '';
+    const blob = document.createElement('span');
+    blob.className = 'blob';
+    blob.style.animationDelay = n.delay;
+    if (kind === 'full' && idea.image){
+      blob.classList.add('photo');
+      blob.style.backgroundImage = `url("${idea.image}")`;
+      const tag = document.createElement('span');
+      tag.className = 'tag'; tag.textContent = idea.title;
+      n.el.append(blob, tag);
+      return;
+    }
+    if (kind !== 'seed') blob.textContent = idea.title;
+    n.el.append(blob);
+  }
+
+  function catKeyOf(i){ return CATS[i.cat] ? i.cat : 'muse'; }
+  function rankOf(i){ return CATS[catKeyOf(i)].rank; }
+  // each category in use gets a height band: the most important floats at the top
+  function isLive(n){ return n.kind === 'full' || n.kind === 'seed'; }
+  function inFilter(i){ return !catFilter || catKeyOf(i) === catFilter; }
+  function computeBands(){
+    const used = [...new Set(ideas.filter(i => i.status !== 'done' && inFilter(i)).map(catKeyOf))].sort((a, b) => CATS[a].rank - CATS[b].rank);
+    bandOf = new Map(used.map((k, i) => [k, used.length === 1 ? 0.5 : i / (used.length - 1)]));
+    const sig = [...bandOf.entries()].map(e => e.join(':')).join('|');
+    if (sig !== bandSig){
+      // right after load the categories arrive a moment after the ideas: re-place instead of drifting slowly
+      if (bandSig && scattered){
+        if (firstAt && performance.now() - firstAt < 3000) rescatterPending = true;
+        else boostUntil = Math.max(boostUntil, performance.now() + 4000);
+      }
+      bandSig = sig;
+    }
+  }
+  // with one category on screen there are no bands: bubbles roam the whole pond
+  function bandYOr(n, b, jitter){
+    const t = bandY(n, b);
+    return t == null ? b.top + n.h / 2 + Math.random() * Math.max(1, b.bottom - b.top - n.h) : t + (Math.random() - 0.5) * jitter;
+  }
+  function bandY(n, b){
+    if (bandOf.size <= 1) return null;
+    const k = n.idea ? catKeyOf(n.idea) : 'muse';
+    const f = bandOf.has(k) ? bandOf.get(k) : 0.5;
+    const pad = Math.min(70, (b.bottom - b.top) * 0.14);
+    return b.top + pad + f * Math.max(0, b.bottom - b.top - pad * 2);
+  }
+  function syncNodes(){
+    computeBands();
+    const active = ideas.filter(i => i.status !== 'done' && inFilter(i));
+    const ranked = active.slice().sort((a, b) => (rankOf(a) - rankOf(b)) || ((b.status === 'want') - (a.status === 'want')) || ((b.createdAt || 0) - (a.createdAt || 0)));
+    const full = new Set(ranked.slice(0, CAP).map(i => i.id));
+    const shown = new Set(active.map(i => i.id));
+    const seen = new Set();
+    for (const idea of ideas){
+      seen.add(idea.id);
+      const kind = idea.status === 'done' ? 'done' : !shown.has(idea.id) ? 'hidden' : (full.has(idea.id) ? 'full' : 'seed');
+      let n = nodes.get(idea.id);
+      if (!n){ n = makeNode(idea); nodes.set(idea.id, n); layer.appendChild(n.el); n.fresh = true; }
+      n.idea = idea; n.kind = kind;
+      paintNode(n, idea, kind);
+    }
+    for (const [id, n] of nodes){ if (!seen.has(id)){ if (peekNode === n) hidePeek(); n.el.remove(); nodes.delete(id); } }
+    if (peekNode && peekNode.kind === 'hidden') hidePeek();
+    if (view !== 'float') return;
+    measure();
+    layoutShelf();
+    if (!pond.clientWidth) return;
+    if (!scattered){
+      scatter(); scattered = true;
+      for (const n of nodes.values()) n.fresh = false;
+    } else if (rescatterPending){
+      rescatterPending = false;
+      scatter();
+    }
+    const settling = performance.now() - firstAt < 1500;
+    for (const n of nodes.values()){
+      if (!n.fresh) continue;
+      n.fresh = false;
+      if (settling) placeQuiet(n); else spawn(n);
+    }
+    if (still) settle(60);
+    applyFilter();
+    draw();
+  }
+  function measure(){ for (const n of nodes.values()){ n.w = n.el.offsetWidth || n.w; n.h = n.el.offsetHeight || n.h; } }
+  function layoutShelf(){
+    const W = pond.clientWidth, H = pond.clientHeight;
+    if (!W) return;
+    const done = [...nodes.values()].filter(n => n.kind === 'done')
+      .sort((a, b) => (b.idea.doneAt || b.idea.createdAt || 0) - (a.idea.doneAt || a.idea.createdAt || 0));
+    if (!done.length) return;
+    const left = 100, right = W - 18;
+    const total = done.reduce((s, n) => s + n.w + 8, -8);
+    const squeeze = total > right - left ? (right - left - total) / Math.max(1, done.length - 1) : 0;
+    let x = left;
+    for (const n of done){ n.tx = x + n.w / 2; n.ty = H - SHELF / 2 + 4; x += n.w + 8 + squeeze; }
+  }
+  function bounds(){ const W = pond.clientWidth, H = pond.clientHeight; return { W, H, left: 14, right: W - 14, top: 14, bottom: H - SHELF - 10 }; }
+  function scatter(){
+    const b = bounds(); if (!b.W) return;
+    const act = [...nodes.values()].filter(isLive).sort((a, c) => hash(a.id + 's') - hash(c.id + 's'));
+    const aw = b.right - b.left;
+    const byBand = new Map();
+    for (const n of act){ const k = catKeyOf(n.idea); if (!byBand.has(k)) byBand.set(k, []); byBand.get(k).push(n); }
+    for (const list of byBand.values()){
+      list.forEach((n, i) => {
+        const r = rng(hash(n.id) + 7);
+        n.x = b.left + aw * (i + 0.5) / list.length + (r() - 0.5) * aw / list.length * 0.4;
+        n.y = bandYOr(n, b, 60);
+      });
+    }
+    for (const n of nodes.values()) if (n.kind === 'done'){ n.x = n.tx; n.y = n.ty; }
+    settle(50);
+  }
+  function placeQuiet(n){
+    const b = bounds();
+    if (n.kind === 'done'){ n.x = n.tx; n.y = n.ty; return; }
+    n.x = b.left + n.w / 2 + Math.random() * Math.max(1, b.right - b.left - n.w);
+    n.y = bandYOr(n, b, 60);
+  }
+  function spawn(n){
+    const b = bounds(); if (!b.W) return;
+    if (still){
+      n.x = b.left + n.w / 2 + Math.random() * (b.right - b.left - n.w);
+      n.y = bandYOr(n, b, 60);
+      return;
+    }
+    if (n.kind === 'done'){ n.x = n.tx; n.y = -n.h; return; }
+    const side = Math.floor(Math.random() * 3);
+    if (side === 0){ n.x = -n.w; n.y = b.top + Math.random() * (b.bottom - b.top); }
+    else if (side === 1){ n.x = b.W + n.w; n.y = b.top + Math.random() * (b.bottom - b.top); }
+    else { n.x = b.left + Math.random() * (b.right - b.left); n.y = -n.h; }
+    const cx = b.W / 2 + (Math.random() - 0.5) * b.W * 0.3, cy = bandY(n, b) ?? (b.top + b.bottom) / 2;
+    const a = Math.atan2(cy - n.y, cx - n.x), s = 520;
+    n.vx = Math.cos(a) * s; n.vy = Math.sin(a) * s;
+    // once it has swum in and slowed down, the water rings open where it settles
+    setTimeout(() => { if (nodes.get(n.id) === n && isLive(n) && n.idea) ripple(n.x, n.y, n.idea.cat, true); }, 900);
+  }
+  function separate(a, c){
+    const gap = 14;
+    const dx = c.x - a.x, dy = c.y - a.y;
+    const ox = (a.w + c.w) / 2 + gap - Math.abs(dx);
+    const oy = (a.h + c.h) / 2 + gap - Math.abs(dy);
+    if (ox > 0 && oy > 0){
+      if (ox < oy){ const s = (dx < 0 ? -1 : 1) * ox * 0.08; a.x -= s; c.x += s; a.vx -= s * 2; c.vx += s * 2; }
+      else { const s = (dy < 0 ? -1 : 1) * oy * 0.08; a.y -= s; c.y += s; a.vy -= s * 2; c.vy += s * 2; }
+    }
+  }
+  function clampNode(n, b){
+    const hw = n.w / 2, hh = n.h / 2;
+    if (n.x - hw < b.left){ n.x = b.left + hw; n.vx = Math.abs(n.vx) * 0.5; }
+    if (n.x + hw > b.right){ n.x = b.right - hw; n.vx = -Math.abs(n.vx) * 0.5; }
+    if (n.y - hh < b.top){ n.y = b.top + hh; n.vy = Math.abs(n.vy) * 0.5; }
+    if (n.y + hh > b.bottom){ n.y = b.bottom - hh; n.vy = -Math.abs(n.vy) * 0.5; }
+  }
+  function settle(iters){
+    const b = bounds(); if (!b.W) return;
+    const act = [...nodes.values()].filter(isLive);
+    for (let k = 0; k < iters; k++){
+      for (let i = 0; i < act.length; i++) for (let j = i + 1; j < act.length; j++) separate(act[i], act[j]);
+      for (const n of act) clampNode(n, b);
+    }
+    for (const n of nodes.values()){ if (n.kind === 'done'){ n.x = n.tx; n.y = n.ty; } n.vx = 0; n.vy = 0; }
+  }
+  function step(dt, T){
+    const b = bounds(); if (!b.W) return;
+    const boosting = performance.now() < boostUntil;
+    const maxPull = boosting ? 160 : 14, pullGain = boosting ? 0.6 : 0.12;
+    const all = [...nodes.values()];
+    const act = [];
+    for (const n of all){
+      if (n.kind === 'hidden') continue;
+      if (n.kind === 'done'){
+        const k = 1 - Math.exp(-dt * 2.6);
+        n.x += (n.tx - n.x) * k; n.y += (n.ty - n.y) * k; n.vx = n.vy = 0;
+        continue;
+      }
+      if (n.dragging) continue;
+      act.push(n);
+      if (n.hover || n === peekNode){ n.vx *= 0.8; n.vy *= 0.8; continue; }
+      const speed = n.kind === 'seed' ? 6 : (n.idea.status === 'want' ? 8 : 13);
+      const ang = n.ph + Math.sin(T * 0.11 + n.ph2) * 2.4 + Math.sin(T * 0.053 + n.ph3) * 1.6;
+      const ty = bandY(n, b);
+      const pull = ty == null ? 0 : Math.max(-maxPull, Math.min(maxPull, (ty - n.y) * pullGain));
+      const dvx = Math.cos(ang) * speed, dvy = Math.sin(ang) * speed * 0.8 + pull;
+      const fast = Math.hypot(n.vx, n.vy) > 40;
+      const k = 1 - Math.exp(-dt * (fast ? 1.8 : 0.9));
+      n.vx += (dvx - n.vx) * k; n.vy += (dvy - n.vy) * k;
+      const hw = n.w / 2, hh = n.h / 2;
+      if (n.x - hw < b.left + 20) n.vx += 6 * dt * 10;
+      if (n.x + hw > b.right - 20) n.vx -= 6 * dt * 10;
+      if (n.y - hh < b.top + 16) n.vy += 6 * dt * 10;
+      if (n.y + hh > b.bottom - 16) n.vy -= 6 * dt * 10;
+      n.x += n.vx * dt; n.y += n.vy * dt;
+      const inside = n.x - hw > -2 && n.x + hw < b.W + 2 && n.y - hh > -2;
+      if (inside || !fast) clampNode(n, b);
+    }
+    for (let i = 0; i < act.length; i++) for (let j = i + 1; j < act.length; j++) separate(act[i], act[j]);
+  }
+  function draw(){
+    for (const n of nodes.values()){
+      n.el.style.transform = `translate3d(${(n.x - n.w / 2).toFixed(1)}px,${(n.y - n.h / 2).toFixed(1)}px,0)`;
+    }
+    if (peekNode) placePeek();
+  }
+
+  /* ---------- hover peek: see an idea without clicking ---------- */
+  const peek = $('#peek');
+  let peekNode = null, peekTimer = 0, peekW = 0, peekH = 0;
+  function showPeek(n){
+    clearTimeout(peekTimer);
+    peekTimer = setTimeout(() => {
+      if (!n.hover || (bubbleDrag && bubbleDrag.started)) return;
+      showPeekNow(n, false);
+    }, 80);
+  }
+  function showPeekNow(n, tapped){
+    clearTimeout(peekTimer);
+    if (!n.idea || view !== 'float' || nodes.get(n.id) !== n) return;
+    peekNode = n;
+    fillPeek(n.idea, tapped);
+    peek.classList.toggle('tap', !!tapped);
+    peek.classList.remove('in');
+    peek.hidden = false;
+    measurePeek();
+    requestAnimationFrame(() => { if (peekNode === n) peek.classList.add('in'); });
+  }
+  function hidePeek(n){
+    clearTimeout(peekTimer);
+    if (n && peekNode && peekNode !== n) return;
+    if (n && peek.classList.contains('tap')) return;
+    peekNode = null;
+    peek.classList.remove('in', 'tap');
+    peek.hidden = true;
+  }
+  peek.addEventListener('click', () => {
+    const n = peekNode; if (!n) return;
+    hidePeek(); openDetail(n.id);
+  });
+  // tapping empty water puts a tapped card away
+  document.addEventListener('pointerdown', e => {
+    if (!peekNode || !peek.classList.contains('tap')) return;
+    if (e.target.closest('#peek') || e.target.closest('.node')) return;
+    hidePeek();
+  }, true);
+  function fillPeek(i, tapped){
+    const c = CATS[catKeyOf(i)];
+    peek.textContent = '';
+    const head = mk('div', 'pk-head');
+    const chip = mk('span', 'chip', c.name); chip.style.setProperty('--c', `var(${c.v})`);
+    head.append(chip);
+    if (i.status === 'want') head.append(mk('span', 'ol-tag', '想做'));
+    if (i.example) head.append(mk('span', 'ol-tag plain', '示例'));
+    peek.append(head, mk('div', 'pk-title', i.title));
+    if (i.body && i.body !== i.title) peek.append(mk('p', 'pk-body', i.body));
+    if (i.image){
+      const im = new Image(); im.className = 'pk-img'; im.alt = '';
+      im.onload = () => { if (!peek.hidden) measurePeek(); };
+      im.src = i.image;
+      peek.append(im);
+    }
+    peek.append(mk('div', 'pk-foot', `记于 ${fmtDate(i.createdAt)} · ${tapped ? '点卡片打开，点空白处收起' : '点一下打开'}`));
+  }
+  function measurePeek(){ peekW = peek.offsetWidth; peekH = peek.offsetHeight; placePeek(); }
+
+  /* ---------- drag a bubble onto a category ---------- */
+  let bubbleDrag = null, dragTipShown = false;
+  function nodeDown(e, n){
+    n.lastPointer = e.pointerType;
+    if (readOnly || !isLive(n) || (e.button !== undefined && e.button > 0) || bubbleDrag) return;
+    const d = { n, id: e.pointerId, type: e.pointerType, sx: e.clientX, sy: e.clientY, x: e.clientX, y: e.clientY, started: false, timer: 0 };
+    bubbleDrag = d;
+    try { n.el.setPointerCapture(e.pointerId); } catch(err) {}
+    // on touch, a short press is a tap; holding still for a moment picks the bubble up
+    if (e.pointerType !== 'mouse'){
+      d.timer = setTimeout(() => {
+        if (bubbleDrag === d && !d.started && Math.hypot(d.x - d.sx, d.y - d.sy) < 10) startBubbleDrag(d);
+      }, 380);
+    }
+  }
+  function nodeMove(e){
+    const d = bubbleDrag;
+    if (!d || e.pointerId !== d.id) return;
+    d.x = e.clientX; d.y = e.clientY;
+    if (!d.started){
+      const moved = Math.hypot(d.x - d.sx, d.y - d.sy);
+      if (d.type === 'mouse' && moved > 6) startBubbleDrag(d);
+      else if (d.type !== 'mouse' && moved > 10){ clearTimeout(d.timer); bubbleDrag = null; }
+      if (!d.started) return;
+    }
+    moveGhost(d);
+  }
+  function nodeUp(e){
+    const d = bubbleDrag;
+    if (!d || e.pointerId !== d.id) return;
+    bubbleDrag = null;
+    clearTimeout(d.timer);
+    try { d.n.el.releasePointerCapture(d.id); } catch(err) {}
+    if (!d.started) return;
+    d.n.justDragged = true;
+    setTimeout(() => { d.n.justDragged = false; }, 450);
+    finishBubbleDrag(d, e.type !== 'pointercancel');
+  }
+  function startBubbleDrag(d){
+    const n = d.n;
+    d.started = true;
+    hidePeek(); buzz();
+    n.dragging = true; n.hover = false;
+    const r = n.el.getBoundingClientRect();
+    d.ox = d.sx - r.left; d.oy = d.sy - r.top;
+    const g = document.createElement('div'); g.className = 'ghost';
+    g.style.setProperty('--c', n.el.style.getPropertyValue('--c'));
+    g.style.setProperty('--r1', n.el.style.getPropertyValue('--r1'));
+    const blob = n.el.querySelector('.blob');
+    if (blob) g.append(blob.cloneNode(true));
+    document.body.append(g);
+    d.ghost = g;
+    n.el.classList.add('lifted');
+    document.body.classList.add('bubble-dragging');
+    renderCatKey();
+    if (!dragTipShown){ dragTipShown = true; toast('拖到上面的类别上，就能换类别'); }
+    moveGhost(d);
+  }
+  function dropTarget(d){
+    const el = document.elementFromPoint(d.x, d.y);
+    const c = el && el.closest('.fchip[data-key]');
+    return c && c.dataset.key ? c : null;
+  }
+  function moveGhost(d){
+    if (!d.ghost) return;
+    d.ghost.style.transform = `translate(${(d.x - d.ox).toFixed(1)}px,${(d.y - d.oy).toFixed(1)}px) rotate(-4deg)`;
+    const t = dropTarget(d);
+    document.querySelectorAll('.fchip.over').forEach(c => { if (c !== t) c.classList.remove('over'); });
+    if (t) t.classList.add('over');
+    const row = $('#catKey'), rr = row.getBoundingClientRect();
+    if (d.y > rr.top - 24 && d.y < rr.bottom + 24){
+      if (d.x < rr.left + 40) row.scrollLeft -= 10;
+      else if (d.x > rr.right - 40) row.scrollLeft += 10;
+    }
+  }
+  function finishBubbleDrag(d, commit){
+    const n = d.n;
+    const t = commit ? dropTarget(d) : null;
+    if (d.ghost) d.ghost.remove();
+    n.el.classList.remove('lifted');
+    document.body.classList.remove('bubble-dragging');
+    n.dragging = false;
+    document.querySelectorAll('.fchip.over').forEach(c => c.classList.remove('over'));
+    renderCatKey();
+    if (t){
+      const key = t.dataset.key;
+      if (CATS[key] && key !== catKeyOf(n.idea)){
+        const name = CATS[key].name, title = n.idea.title;
+        write(() => store.update(n.id, { cat: key })).then(ok => {
+          if (!ok) return;
+          Sound.tap(key); buzz();
+          toast(catFilter && catFilter !== key ? `「${title}」换到了「${name}」，现在只显示别的类别，所以它暂时看不到` : `「${title}」换到了「${name}」`);
+        });
+      }
+      return;
+    }
+    // dropped on the water: leave it where it was put down
+    const pr = pond.getBoundingClientRect();
+    if (commit && d.x > pr.left && d.x < pr.right && d.y > pr.top && d.y < pr.bottom){
+      n.x = d.x - d.ox - pr.left - pond.clientLeft + n.w / 2;
+      n.y = d.y - d.oy - pr.top - pond.clientTop + n.h / 2;
+      n.vx = 0; n.vy = 0;
+      clampNode(n, bounds());
+      draw();
+      ripple(n.x, n.y, n.idea && n.idea.cat);
+      Sound.tap(n.idea && n.idea.cat);
+    }
+  }
+  document.addEventListener('touchmove', e => { if (bubbleDrag && bubbleDrag.started) e.preventDefault(); }, { passive: false });
+  function placePeek(){
+    const n = peekNode; if (!n) return;
+    const W = pond.clientWidth, H = pond.clientHeight;
+    let top = n.y - n.h / 2 - 12 - peekH;
+    if (top < 8) top = n.y + n.h / 2 + 12;
+    top = Math.max(8, Math.min(H - peekH - 8, top));
+    const left = Math.max(8, Math.min(W - peekW - 8, n.x - peekW / 2));
+    peek.style.transform = `translate(${left.toFixed(1)}px,${top.toFixed(1)}px)`;
+  }
+  let last = performance.now();
+  function loop(t){
+    const dt = Math.min(0.05, (t - last) / 1000); last = t;
+    if (!still && view === 'float' && nodes.size){ step(dt, t / 1000); draw(); }
+    requestAnimationFrame(loop);
+  }
+
+  /* ---------- filter / counts / list ---------- */
+  function matches(i){
+    if (!inFilter(i)) return false;
+    if (!query) return true;
+    const q = query.toLowerCase();
+    return (i.title || '').toLowerCase().includes(q) || (i.body || '').toLowerCase().includes(q) || ((CATS[i.cat] || {}).name || '').includes(query);
+  }
+  function applyFilter(){
+    for (const n of nodes.values()){
+      const m = matches(n.idea);
+      n.el.classList.toggle('dim', !!query && !m);
+      n.el.classList.toggle('hit', !!query && m);
+    }
+  }
+  function renderCounts(){
+    const want = ideas.filter(i => i.status === 'want').length;
+    $('#counts').textContent = `灵感 ${ideas.length - want} · 想做 ${want} · 已完成 ${doneIds.size}`;
+  }
+  function renderEmpty(){
+    const box = $('#empty');
+    if (!loaded){ box.hidden = false; return; }
+    box.hidden = ideas.length > 0;
+    $('#emptyTitle').textContent = '池子还是空的';
+    $('#emptyText').textContent = readOnly ? '这里还没有人放进灵感。' : '想到什么但现在没空做？先记下来，让它在这里漂着。';
+    $('#emptyAdd').hidden = readOnly;
+  }
+  function renderExamples(){
+    const has = ideas.some(i => i.example);
+    const btn = $('#clearEx');
+    btn.hidden = readOnly || !has;
+    if (!has){ btn.textContent = '清除示例'; btn.dataset.arm = ''; }
+  }
+  function renderList(){
+    const box = $('#list');
+    if (view !== 'list') return;
+    box.textContent = '';
+    const shown = ideas.filter(matches);
+    if (!shown.length){
+      const p = document.createElement('p'); p.className = 'list-empty';
+      p.textContent = !loaded ? '正在打开灵感池…' : (ideas.length ? `没有找到和「${query}」有关的灵感。` : '还没有灵感，点「记下灵感」放进第一个。');
+      box.append(p); return;
+    }
+    for (const [key, items] of groupByCat(shown)){
+      const gc = CATS[key];
+      const g = document.createElement('div'); g.className = 'group';
+      const h = document.createElement('h3');
+      const dot = document.createElement('span'); dot.className = 'rank-dot';
+      dot.style.setProperty('--c', `var(${gc.v})`); dot.textContent = gc.rank + 1;
+      const nm = document.createElement('span'); nm.textContent = gc.name;
+      const sm = document.createElement('small'); sm.textContent = items.length + ' 个';
+      h.append(dot, nm, sm);
+      const cards = document.createElement('div'); cards.className = 'cards';
+      for (const i of items){
+        const c = CATS[i.cat] || CATS.muse;
+        const card = document.createElement('button'); card.type = 'button'; card.className = 'card';
+        card.style.setProperty('--c', `var(${c.v})`);
+        card.style.setProperty('--r1', radii(rng(hash(i.id))));
+        if (selecting){
+          card.setAttribute('aria-pressed', String(selected.has(i.id)));
+          const tick = document.createElement('span'); tick.className = 'tick'; tick.setAttribute('aria-hidden', 'true');
+          card.append(tick);
+        }
+        const sw = document.createElement('span'); sw.className = 'sw';
+        if (i.image){ sw.style.backgroundImage = `url("${i.image}")`; sw.style.borderRadius = '50%'; }
+        const meta = document.createElement('span'); meta.className = 'meta';
+        const st = document.createElement('strong'); st.textContent = i.title;
+        const p = document.createElement('p'); p.textContent = i.body || '（没有写详细内容）';
+        const t = document.createElement('time'); t.textContent = `${fmtDate(i.createdAt)}${i.status === 'want' ? ' · 想做' : ''}${i.example ? ' · 示例' : ''}`;
+        meta.append(st, p, t);
+        card.append(sw, meta);
+        card.addEventListener('click', () => {
+          if (!selecting){ openDetail(i.id); return; }
+          if (busy) return;
+          if (selected.has(i.id)) selected.delete(i.id); else selected.add(i.id);
+          card.setAttribute('aria-pressed', String(selected.has(i.id)));
+          renderSelect();
+        });
+        cards.append(card);
+      }
+      g.append(h, cards);
+      box.append(g);
+    }
+  }
+
+  let firstAt = 0;
+  function setIdeas(list){
+    if (!firstAt) firstAt = performance.now();
+    ideas = list.filter(i => i && i.title).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    syncNodes();
+    loaded = true;
+    renderCounts(); renderEmpty(); renderExamples(); renderCatKey(); renderViews(); renderSelect();
+    if (openId) refreshDetail();
+  }
+
+  /* ---------- categories ---------- */
+  const MAX_CUSTOM = 12;
+  function currentCat(){ const el = document.querySelector('input[name="cat"]:checked'); return el ? el.value : 'draw'; }
+  // CATS is rebuilt in priority order; its key order is the order everything shows in
+  function rebuildCats(){
+    const all = Object.assign({}, BASE_CATS);
+    for (const c of customCats){
+      const col = PALETTE.includes(c.color) ? c.color : 'butter';
+      all[c.id] = { name: String(c.name).trim().slice(0, 8), v: '--' + col, custom: true };
+    }
+    const keys = Object.keys(all);
+    const ordered = catOrder.filter((k, i) => all[k] && catOrder.indexOf(k) === i).concat(keys.filter(k => !catOrder.includes(k)));
+    const next = {};
+    ordered.forEach((k, i) => { next[k] = Object.assign({}, all[k], { rank: i }); });
+    CATS = next;
+    computeBands();
+  }
+  function refreshCats(){
+    const sel = $('#composer').hidden ? null : currentCat();
+    renderCatKey();
+    if (sel) renderCatChips(sel);
+    if (!$('#prio').hidden && !prioDrag) renderPrio();
+    if (loaded){ syncNodes(); renderViews(); if (openId) refreshDetail(); }
+  }
+  function setCats(list){
+    customCats = list
+      .filter(c => c && c.id && typeof c.name === 'string' && c.name.trim() && !BASE_CATS[c.id])
+      .sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+    rebuildCats();
+    refreshCats();
+  }
+  function onOrder(list){
+    if (orderPending) return;
+    catOrder = Array.isArray(list) ? list.filter(k => typeof k === 'string').slice(0, 64) : [];
+    rebuildCats();
+    refreshCats();
+  }
+  function groupByCat(list){
+    const m = new Map();
+    for (const i of list){ const k = catKeyOf(i); if (!m.has(k)) m.set(k, []); m.get(k).push(i); }
+    const arr = [...m.entries()].sort((a, b) => CATS[a[0]].rank - CATS[b[0]].rank);
+    for (const [, items] of arr) items.sort((a, b) => ((b.status === 'want') - (a.status === 'want')) || ((b.createdAt || 0) - (a.createdAt || 0)));
+    return arr;
+  }
+  // the filter row doubles as the colour key; chips follow priority order
+  function renderCatKey(){
+    const box = $('#catKey');
+    if (catFilter && !CATS[catFilter]) catFilter = null;
+    const counts = {};
+    let total = 0;
+    for (const i of ideas){ if (i.status === 'done') continue; total++; const k = catKeyOf(i); counts[k] = (counts[k] || 0) + 1; }
+    const scroll = box.scrollLeft;
+    box.textContent = '';
+    box.classList.toggle('on', !!catFilter);
+    const showAll = !!(bubbleDrag && bubbleDrag.started);
+    box.classList.toggle('dropping', showAll);
+    const mkChip = (key, label, n, colorVar) => {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'fchip' + (key ? '' : ' all');
+      b.dataset.key = key || '';
+      b.setAttribute('aria-pressed', String(catFilter === key));
+      if (colorVar) b.style.setProperty('--c', `var(${colorVar})`);
+      const t = document.createElement('span'); t.textContent = label;
+      const c = document.createElement('small'); c.textContent = n;
+      b.append(t, c);
+      b.addEventListener('click', () => setFilter(key === catFilter ? null : key));
+      return b;
+    };
+    box.append(mkChip(null, '全部', total, null));
+    for (const [k, c] of Object.entries(CATS)){
+      if (!showAll && !counts[k] && k !== catFilter) continue;
+      box.append(mkChip(k, c.name, counts[k] || 0, c.v));
+    }
+    box.scrollLeft = scroll;
+    renderQuickCats();
+  }
+  function setFilter(k){
+    if (k === catFilter){ renderCatKey(); return; }
+    catFilter = k;
+    if (k && $('#qCat').querySelector(`option[value="${cssEsc(k)}"]`)){ $('#qCat').value = k; paintQuickCat(); }
+    renderCatKey();
+    syncNodes();
+    if (view === 'float' && scattered){ scatter(); draw(); }
+    renderViews(); renderSelect();
+    if (k) Sound.tap(k);
+  }
+  function renderCatChips(sel){
+    if (!CATS[sel]) sel = 'muse';
+    const box = $('#cCats'); box.textContent = '';
+    for (const [key, c] of Object.entries(CATS)){
+      const wrap = document.createElement('span'); wrap.className = 'catwrap' + (c.custom ? ' custom' : '');
+      const lab = document.createElement('label');
+      const inp = document.createElement('input');
+      inp.type = 'radio'; inp.name = 'cat'; inp.id = 'cat-' + key; inp.value = key; inp.checked = key === sel;
+      const sp = document.createElement('span'); sp.style.setProperty('--c', `var(${c.v})`); sp.textContent = c.name;
+      lab.append(inp, sp); wrap.append(lab);
+      if (c.custom){
+        const x = document.createElement('button'); x.type = 'button'; x.className = 'catx'; x.textContent = '×';
+        x.setAttribute('aria-label', `删除类别「${c.name}」`);
+        x.addEventListener('click', () => armRemoveCat(x, key, c.name));
+        wrap.append(x);
+      }
+      box.append(wrap);
+    }
+    const add = document.createElement('button'); add.type = 'button'; add.className = 'addcat'; add.id = 'addCat';
+    if (customCats.length >= MAX_CUSTOM){ add.disabled = true; add.textContent = `最多 ${MAX_CUSTOM} 个自己的类别`; }
+    else add.textContent = '＋ 新类别';
+    add.hidden = !$('#newCat').hidden;
+    add.addEventListener('click', openNewCat);
+    box.append(add);
+  }
+  function renderPalette(sel){
+    const box = $('#ncColors'); box.textContent = '';
+    for (const p of PALETTE){
+      const lab = document.createElement('label');
+      const inp = document.createElement('input');
+      inp.type = 'radio'; inp.name = 'nccolor'; inp.id = 'nc-' + p; inp.value = p; inp.checked = p === sel;
+      inp.setAttribute('aria-label', COLOR_NAMES[p]);
+      inp.addEventListener('change', updateNcPreview);
+      const sp = document.createElement('span'); sp.style.setProperty('--c', `var(--${p})`);
+      lab.title = COLOR_NAMES[p];
+      lab.append(inp, sp); box.append(lab);
+    }
+  }
+  function ncColor(){ const el = document.querySelector('input[name="nccolor"]:checked'); return el ? el.value : 'butter'; }
+  function updateNcPreview(){
+    const p = $('#ncPreview');
+    p.textContent = $('#ncName').value.trim() || '新类别';
+    p.style.setProperty('--c', `var(--${ncColor()})`);
+  }
+  function openNewCat(){
+    if (customCats.length >= MAX_CUSTOM) return;
+    $('#newCat').hidden = false;
+    const add = $('#addCat'); if (add) add.hidden = true;
+    $('#ncName').value = '';
+    const used = new Set(Object.values(CATS).map(c => c.v.slice(2)));
+    renderPalette(PALETTE.find(p => !used.has(p)) || PALETTE[Math.floor(Math.random() * PALETTE.length)]);
+    updateNcPreview();
+    $('#ncName').focus();
+  }
+  function closeNewCat(){
+    $('#newCat').hidden = true;
+    const add = $('#addCat'); if (add) add.hidden = false;
+  }
+  async function addCategory(){
+    const name = $('#ncName').value.trim();
+    if (!name){ toast('先给类别起个名字'); $('#ncName').focus(); return; }
+    if (Object.values(CATS).some(c => c.name === name)){ toast(`已经有「${name}」这个类别了`); $('#ncName').focus(); return; }
+    if (customCats.length >= MAX_CUSTOM){ toast(`自己的类别最多 ${MAX_CUSTOM} 个，先删掉一个不用的`); return; }
+    const color = ncColor();
+    const id = 'c' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+    const btn = $('#ncAdd'); btn.disabled = true;
+    const ok = await write(() => store.setCat(id, { name, color, createdAt: Date.now() }));
+    btn.disabled = false;
+    if (!ok) return;
+    if (!customCats.some(cc => cc.id === id)) customCats.push({ id, name, color, createdAt: Date.now() });
+    rebuildCats();
+    closeNewCat();
+    renderCatChips(id);
+    renderCatKey();
+    const chosen = document.getElementById('cat-' + id); if (chosen) chosen.focus();
+    toast(`加好了「${name}」，已经帮你选上`);
+  }
+  function armRemoveCat(x, key, name){
+    if (x.dataset.arm !== '1'){
+      x.dataset.arm = '1'; x.classList.add('armed'); x.textContent = '删除？';
+      x.setAttribute('aria-label', `再点一次，删除类别「${name}」`);
+      setTimeout(() => {
+        if (!document.contains(x)) return;
+        x.dataset.arm = ''; x.classList.remove('armed'); x.textContent = '×';
+        x.setAttribute('aria-label', `删除类别「${name}」`);
+      }, 3000);
+      return;
+    }
+    removeCategory(key);
+  }
+  async function removeCategory(key){
+    const c = CATS[key]; if (!c || !c.custom) return;
+    const used = ideas.filter(i => i.cat === key).length;
+    const sel = currentCat() === key ? 'muse' : currentCat();
+    if (!(await write(() => store.removeCat(key)))) return;
+    customCats = customCats.filter(cc => cc.id !== key);
+    rebuildCats();
+    renderCatChips(sel);
+    renderCatKey();
+    if (loaded){ syncNodes(); renderViews(); }
+    toast(used ? `删除了「${c.name}」，用它的 ${used} 个灵感会显示成「随想」` : `删除了类别「${c.name}」`);
+  }
+  $('#ncName').addEventListener('input', updateNcPreview);
+  $('#ncName').addEventListener('keydown', e => {
+    if (e.key === 'Enter'){ e.preventDefault(); addCategory(); }
+    else if (e.key === 'Escape'){ e.stopPropagation(); closeNewCat(); const a = $('#addCat'); if (a) a.focus(); }
+  });
+  $('#ncAdd').addEventListener('click', addCategory);
+  $('#ncCancel').addEventListener('click', () => { closeNewCat(); const a = $('#addCat'); if (a) a.focus(); });
+
+  /* ---------- priority ---------- */
+  const cssEsc = s => (window.CSS && CSS.escape) ? CSS.escape(s) : s;
+  function moveCat(key, act){
+    const keys = Object.keys(CATS);
+    const i = keys.indexOf(key); if (i < 0) return;
+    const j = act === 'top' ? 0 : act === 'up' ? i - 1 : i + 1;
+    if (j < 0 || j >= keys.length || j === i) return;
+    keys.splice(i, 1); keys.splice(j, 0, key);
+    applyOrder(keys, key, act);
+  }
+  function applyOrder(keys, key, act){
+    if (readOnly){ toast('这个灵感池你只能看，不能改'); renderPrio(); return; }
+    catOrder = keys;
+    orderPending = true;
+    boostUntil = performance.now() + 5000;
+    rebuildCats();
+    refreshCats();
+    if (still && view === 'float' && scattered){ scatter(); draw(); }
+    renderPrio(key, act);
+    Sound.tap(key);
+    clearTimeout(orderTimer);
+    orderTimer = setTimeout(async () => {
+      orderTimer = 0;
+      await write(() => store.setOrder(catOrder.slice()));
+      if (!orderTimer) orderPending = false;
+    }, 500);
+  }
+  function renderPrio(focusKey, focusAct){
+    const box = $('#prioList'); box.textContent = '';
+    const keys = Object.keys(CATS);
+    keys.forEach((k, i) => {
+      const c = CATS[k];
+      const li = document.createElement('li'); li.className = 'prio-row';
+      li.dataset.key = k;
+      if (k === focusKey){ li.classList.add('moved'); setTimeout(() => li.classList.remove('moved'), 900); }
+      const grip = document.createElement('span'); grip.className = 'grip'; grip.setAttribute('aria-hidden', 'true');
+      grip.title = '按住拖动';
+      li.addEventListener('pointerdown', e => dragDown(e, li, k));
+      li.addEventListener('pointermove', dragMove);
+      li.addEventListener('pointerup', dragEnd);
+      li.addEventListener('pointercancel', dragEnd);
+      li.addEventListener('lostpointercapture', dragEnd);
+      const n = document.createElement('span'); n.className = 'prio-n'; n.textContent = i + 1;
+      const chip = document.createElement('span'); chip.className = 'chip';
+      chip.style.setProperty('--c', `var(${c.v})`); chip.textContent = c.name;
+      const cnt = document.createElement('span'); cnt.className = 'mono';
+      cnt.textContent = ideas.filter(x => catKeyOf(x) === k).length + ' 个';
+      const btns = document.createElement('span'); btns.className = 'prio-btns';
+      const mkBtn = (act, label, aria, cls, disabled) => {
+        const b = document.createElement('button'); b.type = 'button'; b.className = cls;
+        b.textContent = label; b.setAttribute('aria-label', aria);
+        b.dataset.key = k; b.dataset.act = act; b.disabled = disabled;
+        b.addEventListener('click', () => moveCat(k, act));
+        return b;
+      };
+      btns.append(
+        mkBtn('top', '置顶', `把「${c.name}」移到最前`, 'btn small', i === 0),
+        mkBtn('up', '↑', `「${c.name}」上移一位`, 'pbtn', i === 0),
+        mkBtn('down', '↓', `「${c.name}」下移一位`, 'pbtn', i === keys.length - 1)
+      );
+      li.append(grip, n, chip, cnt, btns);
+      box.append(li);
+    });
+    if (focusKey && focusAct){
+      let b = box.querySelector(`[data-key="${cssEsc(focusKey)}"][data-act="${focusAct}"]`);
+      if (!b || b.disabled) b = box.querySelector(`[data-key="${cssEsc(focusKey)}"]:not(:disabled)`);
+      if (b) b.focus();
+    }
+  }
+  // drag to reorder: mouse can grab the whole row, touch uses the grip so the sheet still scrolls
+  let prioDrag = null, prioRaf = 0;
+  function dragDown(e, li, key){
+    if (readOnly || prioDrag) return;
+    if (e.button !== undefined && e.button !== 0) return;
+    if (e.target.closest('button')) return;
+    const onGrip = !!e.target.closest('.grip');
+    if (e.pointerType !== 'mouse' && !onGrip) return;
+    prioDrag = { li, key, id: e.pointerId, startY: e.clientY, lastY: e.clientY, started: false };
+    try { li.setPointerCapture(e.pointerId); } catch(err) {}
+    e.preventDefault();
+  }
+  function dragMove(e){
+    const d = prioDrag;
+    if (!d || e.pointerId !== d.id) return;
+    d.lastY = e.clientY;
+    if (!d.started){
+      if (Math.abs(d.lastY - d.startY) < 5) return;
+      const list = $('#prioList');
+      d.rows = [...list.children].map(el => ({ el, key: el.dataset.key, top: el.offsetTop, h: el.offsetHeight }));
+      d.from = d.rows.findIndex(r => r.el === d.li);
+      d.to = d.from;
+      d.gap = parseFloat(getComputedStyle(list).rowGap) || 8;
+      d.scroll0 = $('#prio .sheet-card').scrollTop;
+      d.started = true;
+      list.classList.add('sorting');
+      d.li.classList.add('dragging');
+      cancelAnimationFrame(prioRaf); prioRaf = requestAnimationFrame(dragScroll);
+    }
+    layoutDrag();
+  }
+  function layoutDrag(){
+    const d = prioDrag; if (!d || !d.started) return;
+    const sc = $('#prio .sheet-card');
+    const me = d.rows[d.from], lastRow = d.rows[d.rows.length - 1];
+    let dy = d.lastY - d.startY + (sc.scrollTop - d.scroll0);
+    dy = Math.max(-me.top + d.rows[0].top, Math.min(lastRow.top + lastRow.h - me.top - me.h, dy));
+    const center = me.top + me.h / 2 + dy;
+    let to = 0;
+    d.rows.forEach((r, i) => { if (i !== d.from && center > r.top + r.h / 2) to++; });
+    d.to = to;
+    const shift = me.h + d.gap;
+    const order = d.rows.map(r => r.key); order.splice(d.from, 1); order.splice(to, 0, d.key);
+    d.rows.forEach((r, i) => {
+      let t = 0;
+      if (i === d.from) t = dy;
+      else if (d.from < to && i > d.from && i <= to) t = -shift;
+      else if (d.from > to && i >= to && i < d.from) t = shift;
+      r.el.style.transform = t ? `translateY(${t}px)` : '';
+      const num = r.el.querySelector('.prio-n'); if (num) num.textContent = order.indexOf(r.key) + 1;
+    });
+  }
+  function dragScroll(){
+    const d = prioDrag;
+    if (!d || !d.started){ prioRaf = 0; return; }
+    const sc = $('#prio .sheet-card'), r = sc.getBoundingClientRect();
+    let v = 0;
+    if (d.lastY < r.top + 48) v = -Math.ceil((r.top + 48 - d.lastY) / 5);
+    else if (d.lastY > r.bottom - 48) v = Math.ceil((d.lastY - r.bottom + 48) / 5);
+    if (v){ const before = sc.scrollTop; sc.scrollTop += v; if (sc.scrollTop !== before) layoutDrag(); }
+    prioRaf = requestAnimationFrame(dragScroll);
+  }
+  function dragEnd(e){
+    const d = prioDrag;
+    if (!d || e.pointerId !== d.id) return;
+    prioDrag = null;
+    cancelAnimationFrame(prioRaf); prioRaf = 0;
+    try { d.li.releasePointerCapture(d.id); } catch(err) {}
+    if (!d.started) return;
+    $('#prioList').classList.remove('sorting');
+    if (d.to === d.from || e.type === 'pointercancel'){ renderPrio(); return; }
+    const keys = d.rows.map(r => r.key);
+    keys.splice(d.from, 1); keys.splice(d.to, 0, d.key);
+    applyOrder(keys, d.key, null);
+  }
+  function openPrio(){ if (readOnly) return; renderPrio(); openSheet($('#prio')); }
+  $('#prioBtn').addEventListener('click', openPrio);
+
+  /* ---------- done = take it out ---------- */
+  async function completeIdea(id){
+    const it = ideas.find(x => x.id === id); if (!it) return false;
+    const nd = nodes.get(id);
+    const at = nd && isLive(nd) ? [nd.x, nd.y] : null;
+    if (!(await write(() => store.remove(id)))) return false;
+    Sound.done(); buzzOk();
+    if (at) ripple(at[0], at[1], it.cat, true);
+    // keep a small record of what got done, so the count survives
+    if (store.setDone && await write(() => store.setDone(id, { title: it.title, cat: it.cat || 'muse', at: Date.now() }))){
+      doneIds.add(id); renderCounts();
+    }
+    offerUndo([it], `做完了「${it.title}」！已经完成 ${doneIds.size} 个`, async () => {
+      if (store.removeDone && await write(() => store.removeDone(id))){ doneIds.delete(id); renderCounts(); }
+    });
+    return true;
+  }
+  function onDone(ids){ doneIds = new Set(ids); renderCounts(); }
+
+  /* ---------- quick capture ---------- */
+  const LASTCAT_KEY = 'fuxiang-lastcat-v1';
+  let lastCat = null, quickSig = '';
+  try { lastCat = localStorage.getItem(LASTCAT_KEY); } catch(e) {}
+  function quickCat(){ const v = $('#qCat').value; return CATS[v] ? v : Object.keys(CATS)[0]; }
+  function renderQuickCats(){
+    const s = $('#qCat');
+    const sig = Object.entries(CATS).map(([k, c]) => k + ':' + c.name).join('|');
+    if (sig === quickSig) { paintQuickCat(); return; }
+    quickSig = sig;
+    const cur = (lastCat && CATS[lastCat]) ? lastCat : (catFilter || Object.keys(CATS)[0]);
+    s.textContent = '';
+    for (const [k, c] of Object.entries(CATS)){ const o = document.createElement('option'); o.value = k; o.textContent = c.name; s.append(o); }
+    s.value = CATS[cur] ? cur : Object.keys(CATS)[0];
+    paintQuickCat();
+  }
+  function paintQuickCat(){
+    const c = CATS[$('#qCat').value] || CATS.muse;
+    $('.qcat').style.setProperty('--c', `var(${c.v})`);
+  }
+  $('#qCat').addEventListener('change', () => {
+    paintQuickCat();
+    lastCat = $('#qCat').value;
+    try { localStorage.setItem(LASTCAT_KEY, lastCat); } catch(e) {}
+    $('#qText').focus();
+  });
+  // a short line becomes the bubble text; a long one keeps its opening as the keyword and the whole text as detail
+  function splitIdea(text){
+    const t = String(text || '').trim().replace(/\s+/g, ' ');
+    if (t.length <= 14) return { title: t, body: '' };
+    const m = t.slice(0, 15).search(/[，。！？、；,.!?;：:]/);
+    return { title: m >= 2 ? t.slice(0, m) : t.slice(0, 12) + '…', body: String(text).trim() };
+  }
+  $('#quick').addEventListener('submit', async e => {
+    e.preventDefault();
+    const raw = $('#qText').value;
+    if (!raw.trim()){ $('#qText').focus(); return; }
+    const { title, body } = splitIdea(raw);
+    const cat = quickCat();
+    const btn = $('#qSave'); btn.disabled = true;
+    const ok = await write(() => store.add({ title, body, cat, status: 'new', image: null, createdAt: Date.now() }));
+    btn.disabled = false;
+    if (!ok) return;
+    $('#qText').value = '';
+    $('#qText').focus();
+    if (catFilter && catFilter !== cat) setFilter(null);
+    Sound.arrive(); buzz();
+    toast(`记下了「${title}」`);
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey) return;
+    const t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable)) return;
+    if (document.querySelector('.sheet:not([hidden])') || $('#quick').hidden) return;
+    e.preventDefault(); $('#qText').focus();
+  });
+
+  try { if (matchMedia('(max-width: 480px)').matches) $('#qText').placeholder = '想到什么就写下来'; } catch(e) {}
+
+  /* ---------- more menu ---------- */
+  const moreBtn = $('#moreBtn'), moreMenu = $('#moreMenu');
+  function setMenu(open){ moreMenu.hidden = !open; moreBtn.setAttribute('aria-expanded', String(open)); }
+  moreBtn.addEventListener('click', e => { e.stopPropagation(); setMenu(moreMenu.hidden); });
+  moreMenu.addEventListener('click', e => { if (e.target.closest('button')) setTimeout(() => setMenu(false), 0); });
+  document.addEventListener('click', e => { if (!moreMenu.hidden && !e.target.closest('#moreWrap')) setMenu(false); });
+  $('#dDone').addEventListener('click', async () => {
+    const id = openId; if (!id) return;
+    if (await completeIdea(id)) closeSheet($('#detail'));
+  });
+
+  /* ---------- outline ---------- */
+  const FOLD_KEY = 'fuxiang-fold-v1';
+  let collapsed = new Set();
+  try { collapsed = new Set(JSON.parse(localStorage.getItem(FOLD_KEY) || '[]')); } catch(e) {}
+  function saveFold(){ try { localStorage.setItem(FOLD_KEY, JSON.stringify([...collapsed])); } catch(e) {} }
+  function mk(tag, cls, text){ const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function renderOutline(focusKey){
+    const box = $('#outline');
+    if (view !== 'outline') return;
+    box.textContent = '';
+    const shown = ideas.filter(i => i.status !== 'done' && matches(i));
+    const groups = groupByCat(shown);
+    const head = mk('div', 'ol-head');
+    head.append(mk('h3', null, '全部灵感'),mk('span', 'mono', query ? `搜到 ${shown.length} 个` : `${shown.length} 个灵感 · ${groups.length} 个类别`));
+    box.append(head);
+    if (!shown.length){
+      box.append(mk('p', 'list-empty', !loaded ? '正在打开灵感池…' : (ideas.length ? `没有找到和「${query}」有关的灵感。` : '还没有灵感，点「记下灵感」放进第一个。')));
+      return;
+    }
+    const tree = mk('ul', 'tree');
+    for (const [key, items] of groups){
+      const c = CATS[key];
+      const open = !!query || !collapsed.has(key);
+      const li = mk('li', 'ol-cat');
+      const fold = mk('button', 'ol-fold'); fold.type = 'button';
+      fold.dataset.key = key;
+      fold.setAttribute('aria-expanded', String(open));
+      const dot = mk('span', 'rank-dot', String(c.rank + 1)); dot.style.setProperty('--c', `var(${c.v})`);
+      fold.append(dot, mk('span', 'ol-name', c.name), mk('span', 'ol-count', `${items.length} 个`), mk('span', 'ol-caret', open ? '▾' : '▸'));
+      fold.addEventListener('click', () => {
+        if (query) return;
+        if (collapsed.has(key)) collapsed.delete(key); else collapsed.add(key);
+        saveFold(); renderOutline(key);
+      });
+      li.append(fold);
+      if (open){
+        const ul = mk('ul');
+        for (const i of items){
+          const it = mk('li', 'ol-item');
+          const row = mk('div', 'ol-idea');
+          if (!readOnly){
+            const chk = mk('button', 'ol-check', '✓'); chk.type = 'button';
+            chk.setAttribute('aria-label', `做完了：${i.title}`);
+            chk.title = '做完了，从池子里拿掉';
+            chk.addEventListener('click', () => {
+              chk.disabled = true;
+              completeIdea(i.id).then(ok => { if (!ok) chk.disabled = false; });
+            });
+            row.append(chk);
+          }
+          const text = mk('div', 'ol-text');
+          const line = mk('span', 'ol-line');
+          const t = mk('button', 'ol-title' + (i.status === 'want' ? ' want' : ''), i.title); t.type = 'button';
+          t.addEventListener('click', () => openDetail(i.id));
+          line.append(t);
+          if (i.status === 'want') line.append(mk('span', 'ol-tag', '想做'));
+          if (i.image) line.append(mk('span', 'ol-tag plain', '有图'));
+          if (i.example) line.append(mk('span', 'ol-tag plain', '示例'));
+          text.append(line);
+          if (i.body) text.append(mk('p', 'ol-body', i.body));
+          row.append(text); it.append(row); ul.append(it);
+        }
+        li.append(ul);
+      }
+      tree.append(li);
+    }
+    box.append(tree);
+    if (focusKey){ const f = box.querySelector(`.ol-fold[data-key="${cssEsc(focusKey)}"]`); if (f) f.focus(); }
+  }
+  function renderViews(){ renderList(); renderOutline(); }
+
+  /* ---------- sheets ---------- */
+  let lastFocus = null;
+  function openSheet(el, focusEl){
+    lastFocus = document.activeElement;
+    el.hidden = false;
+    setTimeout(() => { (focusEl || el.querySelector('[data-close]')).focus(); }, 30);
+  }
+  function closeSheet(el){
+    if (el.hidden) return;
+    el.hidden = true;
+    if (el.id === 'detail') openId = null;
+    if (lastFocus && document.contains(lastFocus)) lastFocus.focus();
+  }
+  document.querySelectorAll('.sheet').forEach(s => {
+    s.addEventListener('click', e => { if (e.target === s) closeSheet(s); });
+    s.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => closeSheet(s)));
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    if (!moreMenu.hidden){ setMenu(false); moreBtn.focus(); }
+    else if (!$('#composer').hidden) closeSheet($('#composer'));
+    else if (!$('#detail').hidden) closeSheet($('#detail'));
+    else if (!$('#prio').hidden) closeSheet($('#prio'));
+    else if (!$('#wipeConfirm').hidden) hideWipe();
+    else if (selecting) exitSelect(true);
+  });
+
+  /* detail */
+  let openId = null;
+  function openDetail(id){ openId = id; $('#dConfirm').hidden = true; refreshDetail(); openSheet($('#detail')); }
+  function refreshDetail(){
+    const i = ideas.find(x => x.id === openId);
+    if (!i){ closeSheet($('#detail')); return; }
+    const c = CATS[i.cat] || CATS.muse;
+    const chip = $('#dCat'); chip.textContent = c.name; chip.style.setProperty('--c', `var(${c.v})`);
+    $('#dDate').textContent = '记于 ' + fmtDate(i.createdAt);
+    $('#dEx').hidden = !i.example;
+    $('#dTitle').textContent = i.title;
+    $('#dBody').textContent = i.body || '（没有写详细内容）';
+    const img = $('#dImg');
+    if (i.image){ img.src = i.image; img.alt = i.title + ' 的图片'; img.hidden = false; } else { img.hidden = true; img.removeAttribute('src'); }
+    document.querySelectorAll('#dStatus button').forEach(b => b.setAttribute('aria-pressed', String((i.status || 'new') === b.dataset.s)));
+  }
+  document.querySelectorAll('#dStatus button').forEach(b => b.addEventListener('click', async () => {
+    const i = ideas.find(x => x.id === openId); if (!i) return;
+    const s = b.dataset.s;
+    if ((i.status || 'new') === s) return;
+    if (await write(() => store.update(i.id, { status: s }))){
+      if (s === 'want') Sound.markWant(); else Sound.tap(i.cat);
+      toast(s === 'want' ? '标成想做了，它会开始扭动' : '放回灵感，慢慢飘');
+    }
+  }));
+  $('#dEdit').addEventListener('click', () => {
+    const i = ideas.find(x => x.id === openId); if (!i) return;
+    closeSheet($('#detail'));
+    openComposer(i);
+  });
+  $('#dDel').addEventListener('click', () => { $('#dConfirm').hidden = false; $('#dDelNo').focus(); });
+  $('#dDelNo').addEventListener('click', () => { $('#dConfirm').hidden = true; $('#dDel').focus(); });
+  $('#dDelYes').addEventListener('click', async () => {
+    const id = openId; if (!id) return;
+    const gone = ideas.find(x => x.id === id);
+    if (await write(() => store.remove(id))){
+      Sound.pop(); closeSheet($('#detail'));
+      if (gone) offerUndo([gone]); else toast('已删除');
+    }
+  });
+
+  /* composer */
+  let editingId = null;
+  let fromQuick = false;
+  let pendingImage = '';
+  function showPreview(){
+    const has = !!pendingImage;
+    $('#cPreview').hidden = !has;
+    $('#cPick').hidden = has;
+    $('#cHint').hidden = has;
+    if (has) $('#cPreviewImg').src = pendingImage; else $('#cPreviewImg').removeAttribute('src');
+  }
+  function openComposer(idea, preset){
+    if (readOnly){ toast('这个灵感池你只能看，不能改'); return; }
+    editingId = idea ? idea.id : null;
+    $('#cHead').textContent = idea ? '改一改这个灵感' : '记下一个灵感';
+    $('#cSave').textContent = idea ? '保存' : '放进池子';
+    $('#cTitle').value = idea ? idea.title : '';
+    $('#cBody').value = idea ? (idea.body || '') : ((preset && preset.body) || '');
+    fromQuick = !idea && !!(preset && preset.body);
+    closeNewCat();
+    renderCatChips(idea ? (idea.cat || 'muse') : quickCat());
+    pendingImage = idea ? (idea.image || '') : '';
+    $('#cFile').value = '';
+    showPreview();
+    openSheet($('#composer'), $('#cTitle'));
+  }
+  async function fileToDataURL(file){
+    const url = URL.createObjectURL(file);
+    try {
+      const img = await new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = url; });
+      const make = (max, q) => {
+        const s = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+        const w = Math.max(1, Math.round(img.naturalWidth * s)), h = Math.max(1, Math.round(img.naturalHeight * s));
+        const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+        const ctx = cv.getContext('2d'); ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, w, h); ctx.drawImage(img, 0, 0, w, h);
+        return cv.toDataURL('image/jpeg', q);
+      };
+      let out = make(720, 0.82);
+      for (let q = 0.72; out.length > 190000 && q >= 0.42; q -= 0.1) out = make(720, q);
+      if (out.length > 190000) out = make(480, 0.6);
+      return out;
+    } finally { URL.revokeObjectURL(url); }
+  }
+  async function takeFile(file){
+    if (!file) return;
+    if (!/^image\//.test(file.type)){ toast('这个文件不是图片'); return; }
+    try { pendingImage = await fileToDataURL(file); showPreview(); }
+    catch(e){ toast('这张图片读不了，换成 JPG 或 PNG 试试'); }
+  }
+  $('#cFile').addEventListener('change', e => takeFile(e.target.files && e.target.files[0]));
+  $('#cRemoveImg').addEventListener('click', () => { pendingImage = ''; $('#cFile').value = ''; showPreview(); });
+  const drop = $('#drop');
+  drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('over'); });
+  drop.addEventListener('dragleave', () => drop.classList.remove('over'));
+  drop.addEventListener('drop', e => { e.preventDefault(); drop.classList.remove('over'); takeFile(e.dataTransfer && e.dataTransfer.files[0]); });
+  document.addEventListener('paste', e => {
+    if ($('#composer').hidden) return;
+    const f = [...((e.clipboardData && e.clipboardData.files) || [])].find(x => /^image\//.test(x.type));
+    if (f){ e.preventDefault(); takeFile(f); }
+  });
+  $('#cForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    let title = $('#cTitle').value.trim();
+    const body = $('#cBody').value.trim();
+    if (!title && !body){ toast('先写点什么再放进去'); $('#cTitle').focus(); return; }
+    if (!title) title = splitIdea(body).title;
+    const catEl = document.querySelector('input[name="cat"]:checked');
+    const cat = catEl ? catEl.value : 'muse';
+    const btn = $('#cSave'); btn.disabled = true;
+    let ok;
+    if (editingId){
+      const id = editingId;
+      ok = await write(() => store.update(id, { title, body, cat, image: pendingImage || null }));
+    } else {
+      ok = await write(() => store.add({ title, body, cat, status: 'new', image: pendingImage || null, createdAt: Date.now() }));
+    }
+    btn.disabled = false;
+    if (ok){
+      closeSheet($('#composer'));
+      if (editingId) Sound.tap(cat); else Sound.arrive();
+      if (!editingId && fromQuick) $('#qText').value = '';
+      toast(editingId ? '改好了' : (view === 'float' ? '放进去了，看它游进来' : '放进去了'));
+    }
+  });
+
+  /* ---------- select & delete ---------- */
+  let selecting = false, busy = false, prevView = 'float';
+  const selected = new Set();
+  function hideWipe(){ $('#wipeConfirm').hidden = true; }
+  function enterSelect(){
+    if (readOnly || selecting) return;
+    selecting = true; prevView = view; selected.clear();
+    document.body.classList.add('selecting');
+    $('#selectBtn').setAttribute('aria-pressed', 'true');
+    $('#selectbar').hidden = false;
+    hideWipe();
+    setView('list');
+    renderSelect();
+  }
+  function exitSelect(restore){
+    if (!selecting || busy) return;
+    selecting = false; selected.clear();
+    document.body.classList.remove('selecting');
+    $('#selectBtn').setAttribute('aria-pressed', 'false');
+    $('#selectbar').hidden = true;
+    hideWipe();
+    setView(restore ? prevView : view);
+  }
+  function renderSelect(){
+    if (!selecting) return;
+    for (const id of [...selected]) if (!ideas.some(i => i.id === id)) selected.delete(id);
+    const shown = ideas.filter(matches);
+    const allOn = shown.length > 0 && shown.every(i => selected.has(i.id));
+    if (!busy) $('#selCount').textContent = selected.size ? `已选 ${selected.size} 个` : '点卡片选择要删除的灵感';
+    const all = $('#selAll');
+    all.textContent = allOn ? '全不选' : (query ? '全选搜到的' : '全选');
+    all.disabled = busy || !shown.length;
+    $('#selDel').disabled = busy || !selected.size;
+    $('#selWipe').disabled = busy || !ideas.length;
+    $('#selDone').disabled = busy;
+    $('#wipeText').textContent = `确定删除全部 ${ideas.length} 个灵感吗？示例也会一起删掉。`;
+  }
+  async function pool(items, fn, onEach){
+    let next = 0, stop = false, done = 0;
+    async function worker(){
+      while (!stop && next < items.length){
+        const it = items[next++];
+        if (await fn(it)){ done++; if (onEach) onEach(it, done); }
+        else stop = true;
+      }
+    }
+    await Promise.all([worker(), worker(), worker()]);
+    return done;
+  }
+  async function removeMany(ids){
+    const want = new Set(ids);
+    const items = ideas.filter(i => want.has(i.id));
+    if (!items.length) return 0;
+    busy = true; renderSelect();
+    const removed = [];
+    await pool(items, it => write(() => store.remove(it.id)), (it, n) => {
+      removed.push(it); selected.delete(it.id);
+      if (selecting) $('#selCount').textContent = `正在删除 ${n} / ${items.length}…`;
+    });
+    busy = false;
+    renderSelect();
+    if (removed.length){
+      if (removed.length > 1) Sound.stir(); else Sound.pop();
+      offerUndo(removed);
+    }
+    return removed.length;
+  }
+
+  let undoTimer = 0, undoItems = [], undoExtra = null;
+  function offerUndo(items, text, extra){
+    undoExtra = extra || null;
+    undoItems = items.map(it => { const data = Object.assign({}, it); delete data.id; return { id: it.id, data }; });
+    $('#undoText').textContent = text || (items.length === 1 ? `已删除「${items[0].title}」` : `已删除 ${items.length} 个灵感`);
+    clearTimeout(toastTimer); $('#toast').hidden = true;
+    $('#undo').hidden = false;
+    clearTimeout(undoTimer); undoTimer = setTimeout(hideUndo, 10000);
+  }
+  function hideUndo(){ clearTimeout(undoTimer); $('#undo').hidden = true; undoItems = []; undoExtra = null; }
+  $('#undoBtn').addEventListener('click', async () => {
+    const items = undoItems, extra = undoExtra; hideUndo();
+    if (!items.length) return;
+    const n = await pool(items, it => write(() => store.restore(it.id, it.data)));
+    if (n && extra) await extra();
+    if (n){ Sound.arrive(); toast(n === 1 ? '恢复了' : `恢复了 ${n} 个灵感`); }
+  });
+
+  $('#selectBtn').addEventListener('click', () => { if (selecting) exitSelect(true); else enterSelect(); });
+  $('#selDone').addEventListener('click', () => exitSelect(true));
+  $('#selAll').addEventListener('click', () => {
+    const shown = ideas.filter(matches);
+    const allOn = shown.length > 0 && shown.every(i => selected.has(i.id));
+    for (const i of shown){ if (allOn) selected.delete(i.id); else selected.add(i.id); }
+    renderList(); renderSelect();
+  });
+  $('#selDel').addEventListener('click', () => { hideWipe(); removeMany([...selected]); });
+  $('#selWipe').addEventListener('click', () => { renderSelect(); $('#wipeConfirm').hidden = false; $('#wipeNo').focus(); });
+  $('#wipeNo').addEventListener('click', () => { hideWipe(); $('#selWipe').focus(); });
+  $('#wipeYes').addEventListener('click', () => { hideWipe(); removeMany(ideas.map(i => i.id)); });
+
+  /* ---------- controls ---------- */
+  $('#addBtn').addEventListener('click', () => openComposer(null, { body: $('#qText').value.trim() }));
+  $('#emptyAdd').addEventListener('click', () => $('#qText').focus());
+  $('#q').addEventListener('input', e => { query = e.target.value.trim(); applyFilter(); renderViews(); renderSelect(); });
+  const VIEW_KEY = 'fuxiang-view-v1';
+  function setView(v){
+    view = v;
+    hidePeek();
+    $('#vFloat').setAttribute('aria-pressed', String(v === 'float'));
+    $('#vList').setAttribute('aria-pressed', String(v === 'list'));
+    $('#vOutline').setAttribute('aria-pressed', String(v === 'outline'));
+    pond.hidden = v !== 'float';
+    $('#list').hidden = v !== 'list';
+    $('#outline').hidden = v !== 'outline';
+    $('#stirBtn').hidden = v !== 'float';
+    $('#stillBtn').hidden = v !== 'float';
+    if (v === 'float'){
+      boostUntil = performance.now() + 4000;
+      syncNodes();
+      if (still && scattered){ scatter(); draw(); }
+    } else if (v === 'list') renderList(); else renderOutline();
+    if (!selecting){ try { localStorage.setItem(VIEW_KEY, v); } catch(e) {} }
+  }
+  function pickView(v){
+    if (selecting){ if (v === 'list' || busy) return; exitSelect(false); }
+    setView(v);
+  }
+  $('#vFloat').addEventListener('click', () => pickView('float'));
+  $('#vList').addEventListener('click', () => pickView('list'));
+  $('#vOutline').addEventListener('click', () => pickView('outline'));
+  function setStill(v){
+    still = v;
+    pond.classList.toggle('still', v);
+    $('#stillBtn').setAttribute('aria-pressed', String(v));
+    $('#stillBtn').textContent = v ? '让它们动' : '静止';
+    $('#stirBtn').disabled = v;
+    if (v){ settle(60); draw(); }
+  }
+  $('#stillBtn').addEventListener('click', () => setStill(!still));
+  $('#stirBtn').addEventListener('click', () => {
+    Sound.stir();
+    ripple(pond.clientWidth * (0.3 + Math.random() * 0.4), pond.clientHeight * (0.3 + Math.random() * 0.4), null, true);
+    for (const n of nodes.values()){
+      if (!isLive(n)) continue;
+      const a = Math.random() * 6.283, s = 280 + Math.random() * 240;
+      n.vx = Math.cos(a) * s; n.vy = Math.sin(a) * s;
+    }
+  });
+  $('#clearEx').addEventListener('click', async () => {
+    const btn = $('#clearEx');
+    if (btn.dataset.arm !== '1'){ btn.dataset.arm = '1'; btn.textContent = '确定清除全部示例？'; return; }
+    btn.disabled = true;
+    await removeMany(ideas.filter(i => i.example).map(i => i.id));
+    btn.disabled = false; btn.dataset.arm = ''; btn.textContent = '清除示例';
+  });
+  try {
+    new ResizeObserver(() => {
+      if (view !== 'float') return;
+      measure(); layoutShelf();
+      if (still){ settle(40); draw(); }
+    }).observe(pond);
+  } catch(e) {}
+
+  /* ---------- phone touches: haptics, backup, privacy ---------- */
+  function buzz(style){
+    const h = capPlugin('Haptics');
+    if (!h) return;
+    try { const p = h.impact({ style: style || 'LIGHT' }); if (p && p.catch) p.catch(() => {}); } catch(e) {}
+  }
+  function buzzOk(){
+    const h = capPlugin('Haptics');
+    if (!h) return;
+    try { const p = h.notification({ type: 'SUCCESS' }); if (p && p.catch) p.catch(() => {}); } catch(e) {}
+  }
+  async function exportBackup(){
+    if (!store || !store.exportText) return;
+    const text = store.exportText();
+    const d = new Date();
+    const name = `fuxiang-backup-${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}.json`;
+    const fs = capPlugin('Filesystem'), share = capPlugin('Share');
+    if (fs && share){
+      try {
+        await fs.writeFile({ path: name, data: text, directory: 'CACHE', encoding: 'utf8' });
+        const r = await fs.getUri({ path: name, directory: 'CACHE' });
+        await share.share({ title: '浮想备份', url: r.uri, dialogTitle: '保存浮想备份' });
+      } catch(e){
+        const msg = String((e && (e.message || e.errorMessage)) || e);
+        if (!/cancel/i.test(msg)) toast('导出没成功，再试一次');
+      }
+      return;
+    }
+    const touch = window.matchMedia && matchMedia('(pointer: coarse)').matches;
+    if (touch && navigator.share && navigator.canShare && typeof File === 'function'){
+      let file = null;
+      for (const type of ['application/json', 'text/plain']){
+        try { const f = new File([text], name, { type }); if (navigator.canShare({ files: [f] })){ file = f; break; } } catch(e) {}
+      }
+      if (file){
+        try { await navigator.share({ files: [file] }); }
+        catch(e){ if (!(e && e.name === 'AbortError')) toast('导出没成功，再试一次'); }
+        return;
+      }
+    }
+    try {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
+      a.download = name;
+      document.body.append(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 3000);
+    } catch(e){ toast('导出没成功，再试一次'); }
+  }
+  $('#exportBtn').addEventListener('click', exportBackup);
+  $('#importBtn').addEventListener('click', () => $('#importFile').click());
+  $('#importFile').addEventListener('change', async e => {
+    const f = e.target.files && e.target.files[0];
+    e.target.value = '';
+    if (!f) return;
+    try {
+      const obj = JSON.parse(await f.text());
+      if (!obj || !Array.isArray(obj.ideas)) throw new Error('not a backup');
+      const r = await store.importData(obj);
+      Sound.arrive(); buzzOk();
+      toast(r.ideas ? `导入了 ${r.ideas} 条灵感` + (r.cats ? `和 ${r.cats} 个类别` : '')
+        : r.cats ? `导入了 ${r.cats} 个类别和排序` : '这份备份里的内容都已经在了');
+    } catch(err){ toast('这个文件不是浮想的备份'); }
+  });
+  $('#privacyBtn').addEventListener('click', () => openSheet($('#privacy')));
+
+  /* ---------- boot ---------- */
+  setStill(still);
+  Sound.init();
+  renderCatKey();
+  renderEmpty();
+  try { const sv = localStorage.getItem(VIEW_KEY); if (sv === 'list' || sv === 'outline') setView(sv); } catch(e) {}
+  requestAnimationFrame(loop);
+  // colours: "auto" follows the clock (7pm–6am, checked once a minute); day or night can also be fixed by hand
+  const THEME_KEY = 'fuxiang-theme-v1';
+  let themePref = 'auto';
+  try { const t = localStorage.getItem(THEME_KEY); if (t === 'day' || t === 'night') themePref = t; } catch(e) {}
+  function isNightNow(){
+    if (themePref === 'day') return false;
+    if (themePref === 'night') return true;
+    const h = new Date().getHours(); return h >= 19 || h < 6;
+  }
+  function applyNight(){
+    const night = isNightNow();
+    document.documentElement.classList.toggle('night', night);
+    const tc = document.querySelector('meta[name=theme-color]');
+    if (tc) tc.setAttribute('content', night ? '#1f1c2a' : '#ffffff');
+    const sb = capPlugin('StatusBar');
+    if (sb){ try { const p = sb.setStyle({ style: night ? 'DARK' : 'LIGHT' }); if (p && p.catch) p.catch(() => {}); } catch(e) {} }
+  }
+  function renderThemeSeg(){ document.querySelectorAll('#themeSeg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.t === themePref))); }
+  document.querySelectorAll('#themeSeg button').forEach(b => b.addEventListener('click', () => {
+    themePref = b.dataset.t;
+    try { localStorage.setItem(THEME_KEY, themePref); } catch(e) {}
+    renderThemeSeg(); applyNight();
+  }));
+  renderThemeSeg();
+  applyNight();
+  setInterval(applyNight, 60000);
+  (async () => {
+    store = await initStore();
+    store.subscribe(setIdeas);
+    if (store.subscribeCats) store.subscribeCats(setCats);
+    if (store.subscribeOrder) store.subscribeOrder(onOrder);
+    if (store.subscribeDone) store.subscribeDone(onDone);
+  })();
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')){
+    window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => {}); });
+  }
+})();
+</script>
+</body>
+</html>
